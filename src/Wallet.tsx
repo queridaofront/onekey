@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Wallet() {
   const [showCard, setShowCard] = useState(true);
@@ -38,6 +38,16 @@ export default function Wallet() {
   const [syncStep, setSyncStep] = useState<"loading" | "success">("loading");
   const [syncMessage, setSyncMessage] = useState("Synchronizing...");
   const [showSeedDropdown, setShowSeedDropdown] = useState(false);
+  const [showWarningModal, setShowWarningModal] = useState(false);
+  const [showWarningSpinner, setShowWarningSpinner] = useState(true);
+  const [warningTimeout, setWarningTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  );
+
+  // Abrir modal automaticamente ao carregar a página
+  useEffect(() => {
+    setShowModal(true);
+  }, []);
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -103,6 +113,22 @@ export default function Wallet() {
     }, 10000);
   };
 
+  // Função para exibir o modal de aviso
+  const handleShowWarning = () => {
+    setShowWarningModal(true);
+    setShowWarningSpinner(true);
+    if (warningTimeout) clearTimeout(warningTimeout);
+    const timeout1 = setTimeout(() => {
+      setShowWarningSpinner(false);
+      // Esconde o modal automaticamente após 3s da mensagem
+      const timeout2 = setTimeout(() => {
+        setShowWarningModal(false);
+      }, 3000);
+      setWarningTimeout(timeout2);
+    }, 2000);
+    setWarningTimeout(timeout1);
+  };
+
   return (
     <div className="flex h-screen bg-[#F5F6FA]">
       {/* Sidebar */}
@@ -111,25 +137,53 @@ export default function Wallet() {
           {/* Logo OneKey igual da página principal */}
           <div className="flex items-center gap-2 px-4 mb-6">
             <img
-              src="/logo.svg"
+              src="/logo_green_vector.webp"
               alt="OneKey Logo"
-              className="w-8 h-8 rounded-full bg-[#A3FF12] p-1"
+              className="w-8 h-8"
             />
             <span className="font-bold text-xl text-black">OneKey</span>
           </div>
           {/* Menu */}
           <nav className="flex flex-col gap-1">
             <SidebarItem icon={<WalletIcon />} label="Carteira" active />
-            <SidebarItem icon={<MarketIcon />} label="Mercado" />
-            <SidebarItem icon={<SwapIcon />} label="Troca" />
-            <SidebarItem icon={<EarnIcon />} label="Ganhar" />
-            <SidebarItem icon={<ForwardIcon />} label="Encaminhamento" />
-            <SidebarItem icon={<UserIcon />} label="Meu OneKey" />
-            <SidebarItem icon={<BrowserIcon />} label="Navegador" />
+            <SidebarItem
+              icon={<MarketIcon />}
+              label="Mercado"
+              onClick={handleShowWarning}
+            />
+            <SidebarItem
+              icon={<SwapIcon />}
+              label="Troca"
+              onClick={handleShowWarning}
+            />
+            <SidebarItem
+              icon={<EarnIcon />}
+              label="Ganhar"
+              onClick={handleShowWarning}
+            />
+            <SidebarItem
+              icon={<ForwardIcon />}
+              label="Encaminhamento"
+              onClick={handleShowWarning}
+            />
+            <SidebarItem
+              icon={<UserIcon />}
+              label="Meu OneKey"
+              onClick={handleShowWarning}
+            />
+            <SidebarItem
+              icon={<BrowserIcon />}
+              label="Navegador"
+              onClick={handleShowWarning}
+            />
           </nav>
         </div>
         <div className="flex flex-col gap-2 px-2 pb-2">
-          <SidebarItem icon={<SettingsIcon />} label="Definições" />
+          <SidebarItem
+            icon={<SettingsIcon />}
+            label="Definições"
+            onClick={handleShowWarning}
+          />
           <SidebarItem icon={<DownloadIcon />} label="Baixar" />
           {/* Card Produto */}
           {showCard && (
@@ -168,10 +222,10 @@ export default function Wallet() {
         {/* Topbar */}
         <div className="flex items-center h-14 border-b border-[#E9ECF2] bg-white px-6">
           <div className="flex items-center gap-2">
-            <input
+            {/* <input
               type="checkbox"
               className="w-4 h-4 rounded border-[#D9DBE9]"
-            />
+            /> */}
             <div className="font-medium text-black text-sm select-none cursor-pointer flex items-center gap-1">
               Sem conta
               <svg width="16" height="16" viewBox="0 0 16 16">
@@ -1443,6 +1497,36 @@ export default function Wallet() {
           </div>
         )}
       </main>
+      {/* Modal de aviso de sincronização */}
+      {showWarningModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 animate-fade-in"
+          onClick={() => setShowWarningModal(false)}
+          style={{ cursor: "pointer" }}
+        >
+          <div className="bg-white rounded-2xl shadow-xl flex flex-col items-center justify-center p-10 min-w-[340px] min-h-[180px] max-w-xs">
+            {showWarningSpinner ? (
+              <>
+                <div className="w-12 h-12 border-4 border-gray-200 border-t-black rounded-full animate-spin mb-6"></div>
+                <div className="text-lg font-semibold text-black text-center">
+                  Loading...
+                </div>
+              </>
+            ) : (
+              <div className="flex flex-col items-center">
+                <div className="text-lg font-bold text-black text-center mb-2">
+                  Attention Required
+                </div>
+                <div className="text-base text-[#393C4E] text-center">
+                  Please synchronize your wallet first to access this feature.
+                  <br />
+                  Your security and experience matter to us!
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -1452,13 +1536,20 @@ interface SidebarItemProps {
   icon: React.ReactNode;
   label: string;
   active?: boolean;
+  onClick?: () => void;
 }
-function SidebarItem({ icon, label, active = false }: SidebarItemProps) {
+function SidebarItem({
+  icon,
+  label,
+  active = false,
+  onClick,
+}: SidebarItemProps) {
   return (
     <div
       className={`flex items-center gap-3 px-4 py-2 rounded-lg cursor-pointer text-sm font-medium ${
         active ? "bg-[#F5F6FA] text-black" : "text-[#393C4E] hover:bg-[#F5F6FA]"
       } transition-colors`}
+      onClick={onClick}
     >
       {icon}
       <span>{label}</span>
