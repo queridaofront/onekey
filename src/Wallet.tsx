@@ -12,6 +12,7 @@ export default function Wallet() {
     | "import-methods"
     | "import-seed-phrase"
     | "import-seed-phrase-onekeytag"
+    | "select-network"
   >("welcome");
   // Adicionar estados para simulação de conexão USB
   const [usbPopup, setUsbPopup] = useState(false);
@@ -365,7 +366,8 @@ export default function Wallet() {
               {/* Header do modal */}
               {modalStep !== "import-methods" &&
                 modalStep !== "import-seed-phrase" &&
-                modalStep !== "import-seed-phrase-onekeytag" && (
+                modalStep !== "import-seed-phrase-onekeytag" &&
+                modalStep !== "select-network" && (
                   <button
                     className="absolute left-6 top-2 text-xl text-[#888] hover:bg-[#F5F6FA] rounded-full p-1"
                     onClick={() => {
@@ -484,7 +486,7 @@ export default function Wallet() {
                           <button
                             className="flex flex-col items-start gap-1 p-4 hover:bg-[#F5F6FA] transition-colors text-left"
                             onClick={() => {
-                              setModalStep("wallets");
+                              setModalStep("select-network");
                               setShowSelect(false);
                             }}
                           >
@@ -611,9 +613,7 @@ export default function Wallet() {
                       </button>
                       <button
                         className="flex flex-col items-start gap-1 p-4 rounded-lg hover:bg-[#F5F6FA] transition-colors border border-[#E9ECF2]"
-                        onClick={() => {
-                          /* ação para conectar carteira externa */
-                        }}
+                        onClick={() => setModalStep("select-network")}
                       >
                         <span className="flex items-center gap-2 text-base font-semibold">
                           <span className="material-icons">link</span>
@@ -1065,6 +1065,57 @@ export default function Wallet() {
                       </button>
                     </div>
                   </>
+                )}
+                {modalStep === "select-network" && (
+                  <div className="w-full max-w-xl flex flex-col p-0 relative animate-fade-in">
+                    <div className="flex items-center h-12 px-4 border-b border-[#E9ECF2] mb-0 mt-2">
+                      <button
+                        className="flex items-center justify-center w-8 h-8 rounded-full hover:bg-[#F5F6FA] z-10 ml-0 mr-1"
+                        onClick={() => setModalStep("welcome")}
+                      >
+                        <span className="material-icons text-xl text-[#393C4E]">
+                          arrow_back
+                        </span>
+                      </button>
+                      <span className="text-base font-semibold text-black">
+                        Selecione a rede
+                      </span>
+                    </div>
+                    <div
+                      className="flex items-center gap-3 px-4 py-4 cursor-pointer hover:bg-[#F5F6FA] rounded-xl transition-colors w-full"
+                      style={{ marginLeft: 0 }}
+                    >
+                      <div
+                        className="flex items-center relative w-20 h-10"
+                        style={{ minWidth: "60px" }}
+                      >
+                        <img
+                          src="/eth.png"
+                          alt="ETH"
+                          className="w-8 h-8 rounded-full absolute left-0 top-1/2 -translate-y-1/2 z-30 border-2 border-white"
+                          style={{ zIndex: 3 }}
+                        />
+                        <img
+                          src="/bsc.png"
+                          alt="BSC"
+                          className="w-8 h-8 rounded-full absolute left-5 top-1/2 -translate-y-1/2 z-20 border-2 border-white"
+                          style={{ zIndex: 2 }}
+                        />
+                        <img
+                          src="/avalanche.png"
+                          alt="Avalanche"
+                          className="w-8 h-8 rounded-full absolute left-10 top-1/2 -translate-y-1/2 z-10 border-2 border-white"
+                          style={{ zIndex: 1 }}
+                        />
+                      </div>
+                      <span className="text-base font-semibold text-black ml-2">
+                        EVM
+                      </span>
+                      <span className="material-icons text-[#A3A3A3] ml-auto">
+                        chevron_right
+                      </span>
+                    </div>
+                  </div>
                 )}
               </div>
               {/* Modal menor e centralizado para código de acesso */}

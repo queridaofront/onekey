@@ -24,8 +24,26 @@ interface DownloadAndroidSectionProps {
 }
 
 function Header() {
+  const [showLangModal, setShowLangModal] = useState(false);
+  let langTimeout: NodeJS.Timeout;
+  const handleEnter = () => {
+    clearTimeout(langTimeout);
+    setShowLangModal(true);
+  };
+  const handleLeave = () => {
+    langTimeout = setTimeout(() => setShowLangModal(false), 150);
+  };
+  const languages = [
+    ["العربية", "বাংলা", "Deutsch"],
+    ["English", "Español", "Filipino"],
+    ["Français", "हिन्दी", "Bahasa Indonesia"],
+    ["Itallano", "日本語", "한국어"],
+    ["Монгол", "Português", "Português (Brasil)"],
+    ["Русский", "ภาษาไทย", "Українська"],
+    ["Tiếng Việt", "简体中文", "繁体中文"],
+  ];
   return (
-    <header className="w-full bg-transparent py-3">
+    <header className="w-full bg-transparent py-3 relative">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-8">
         {/* Esquerda: Logo e Menu */}
         <div className="flex items-center gap-12">
@@ -55,9 +73,18 @@ function Header() {
           </nav>
         </div>
         {/* Direita */}
-        <div className="flex items-center gap-4">
-          <img src="/mundo.svg" alt="Mundo" className="w-6 h-6" />
-          <span className="font-medium flex items-center gap-1">Português</span>
+        <div
+          className="flex items-center gap-4 relative"
+          onMouseLeave={handleLeave}
+        >
+          <div className="flex items-center gap-1" onMouseEnter={handleEnter}>
+            <img
+              src="/mundo.svg"
+              alt="Mundo"
+              className="w-6 h-6 cursor-pointer"
+            />
+            <span className="font-medium cursor-pointer">Português</span>
+          </div>
           <img src="/sacola.svg" alt="Sacola" className="w-6 h-6" />
           <a
             href="#"
@@ -66,6 +93,27 @@ function Header() {
             Download grátis
             <img src="/logo.svg" alt="Logo" className="w-6 h-6" />
           </a>
+          {/* Modal de idiomas */}
+          {showLangModal && (
+            <div
+              className="absolute left-0 top-12 z-50 bg-white rounded-2xl shadow-xl p-6 flex flex-col items-center animate-fade-in"
+              style={{ minWidth: 340 }}
+              onMouseEnter={handleEnter}
+              onMouseLeave={handleLeave}
+            >
+              <div className="grid grid-cols-3 gap-x-8 gap-y-2">
+                {languages.flat().map((lang, idx) => (
+                  <button
+                    key={lang}
+                    className="text-black text-base font-medium py-1 px-2 rounded hover:bg-[#F5F6FA] transition-colors"
+                    onClick={() => setShowLangModal(false)}
+                  >
+                    {lang}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </header>
