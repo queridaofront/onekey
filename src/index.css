@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes spin-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-slow {
+  animation: spin-slow 1.6s linear infinite;
+}
+.cabo-animado {
+  animation: caboEncaixe 1.2s cubic-bezier(0.4, 1.6, 0.4, 1) forwards;
+}
+@keyframes caboEncaixe {
+  0% {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.linhas-animadas line {
+  opacity: 0;
+  animation: linhaVerde 1.2s 1s forwards;
+}
+@keyframes linhaVerde {
+  to {
+    opacity: 1;
+  }
+}
+@keyframes spin-fadeout {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(360deg);
+  }
+}
+.animate-spin-fadeout {
+  animation: spin-fadeout 0.7s cubic-bezier(0.4, 1.6, 0.4, 1) forwards;
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.animate-fade-in {
+  animation: fade-in 0.5s ease-in;
+}
