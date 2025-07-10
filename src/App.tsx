@@ -256,7 +256,7 @@ function DownloadSection() {
                   borderRadius: 100,
                 }}
                 onClick={() => {
-                  registrarEvento("download", "/");
+                  registrarEvento("download", "windows");
                   // Ação de download normal
                 }}
               >
@@ -374,6 +374,10 @@ function DownloadMacSection() {
                   height: 62,
                   borderRadius: 100,
                 }}
+                onClick={() => {
+                  registrarEvento("download", "macos");
+                  // Ação de download normal
+                }}
               >
                 <img
                   src="/A.svg"
@@ -389,6 +393,10 @@ function DownloadMacSection() {
                   width: 340,
                   height: 62,
                   borderRadius: 100,
+                }}
+                onClick={() => {
+                  registrarEvento("download", "macos");
+                  // Ação de download normal
                 }}
               >
                 <img
@@ -863,6 +871,9 @@ function DownloadChromeSection() {
                   height: 54,
                   borderRadius: 100,
                 }}
+                onClick={() => {
+                  registrarEvento("download", "chrome");
+                }}
               >
                 {/* Usar crome.svg da pasta public */}
                 <img
@@ -979,6 +990,9 @@ function DownloadLinuxSection() {
                   height: 62,
                   borderRadius: 100,
                 }}
+                onClick={() => {
+                  registrarEvento("download", "linux");
+                }}
               >
                 {/* Avião Snap Store */}
                 <svg
@@ -1002,6 +1016,9 @@ function DownloadLinuxSection() {
                   width: 340,
                   height: 62,
                   borderRadius: 100,
+                }}
+                onClick={() => {
+                  registrarEvento("download", "linux");
                 }}
               >
                 <img
@@ -1071,6 +1088,9 @@ function HardwareBridgeSection() {
                   height: 54,
                   borderRadius: 100,
                 }}
+                onClick={() => {
+                  registrarEvento("download", "macos");
+                }}
               >
                 <img
                   src="/apple.svg"
@@ -1086,6 +1106,9 @@ function HardwareBridgeSection() {
                   width: 180,
                   height: 54,
                   borderRadius: 100,
+                }}
+                onClick={() => {
+                  registrarEvento("download", "windows");
                 }}
               >
                 <img
@@ -1109,6 +1132,9 @@ function HardwareBridgeSection() {
                     borderRadius: 100,
                   }}
                   tabIndex={0}
+                  onClick={() => {
+                    registrarEvento("download", "linux");
+                  }}
                 >
                   <img
                     src="/linux.svg"

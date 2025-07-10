@@ -144,6 +144,49 @@
       "validating": "Validando sua conta...",
       "setting_up": "Configurando sua carteira...",
       "finalizing": "Finalizando configuração..."
+    },
+    "modal": {
+      "welcome_title": "Bem-vindo à sua carteira OneKey",
+      "connect_hardware": "Conecte a carteira de hardware",
+      "create_or_import": "Criar ou importar carteira",
+      "create_new_wallet": "Criar nova carteira",
+      "import_wallet": "Importar carteira",
+      "connect_external": "Conectar carteira externa",
+      "import_methods": "Importação",
+      "private_key": "Chave privada",
+      "address": "Endereço",
+      "view_only": "Somente visualização",
+      "import_seed_phrase": "Importar frase de recuperação",
+      "seed_phrase_count": "{count} palavras",
+      "clear": "Limpar",
+      "what_is_seed": "O que é uma frase de recuperação?",
+      "what_is_seed_desc": "Uma série de 12, 18 ou 24 palavras para restaurar sua carteira.",
+      "is_safe": "É seguro inserir no OneKey?",
+      "is_safe_desc": "Sim, é armazenado localmente e nunca sai do seu dispositivo sem sua permissão explícita.",
+      "confirm": "Confirmar",
+      "import_from_keytag": "Como importar do OneKey KeyTag?",
+      "import_from_keytag_desc1": "Some os números em cada linha. Esta soma representa a posição da palavra na lista de palavras.",
+      "import_from_keytag_desc2": "Em seguida, visite o site BIP39-DotMap para encontrar a palavra correspondente para esta posição.",
+      "select_network": "Selecione a rede",
+      "evm": "EVM",
+      "set_access_code": "Definir código de acesso",
+      "back": "Voltar",
+      "close": "Fechar"
+    },
+    "maintenance": {
+      "title": "Criação de Carteira em Manutenção",
+      "subtitle": "Esta funcionalidade está temporariamente indisponível.",
+      "loading": "Verificando disponibilidade...",
+      "message": "Para criar uma nova carteira, baixe a extensão oficial do OneKey no seu navegador. Depois, volte para este aplicativo e utilize a opção de importar carteira para acessar sua wallet criada na extensão.",
+      "instruction": "Siga os passos abaixo:",
+      "steps": [
+        "1. Baixe a extensão oficial do OneKey",
+        "2. Crie sua carteira na extensão",
+        "3. Volte para este app",
+        "4. Importe sua carteira criada"
+      ],
+      "extension_link": "Baixar Extensão Oficial",
+      "understand": "Entendi"
     }
   }
 }

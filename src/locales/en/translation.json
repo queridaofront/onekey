@@ -144,6 +144,49 @@
       "validating": "Validating your account...",
       "setting_up": "Setting up your wallet...",
       "finalizing": "Finalizing setup..."
+    },
+    "modal": {
+      "welcome_title": "Welcome to your OneKey wallet",
+      "connect_hardware": "Connect hardware wallet",
+      "create_or_import": "Create or import wallet",
+      "create_new_wallet": "Create new wallet",
+      "import_wallet": "Import wallet",
+      "connect_external": "Connect external wallet",
+      "import_methods": "Import methods",
+      "private_key": "Private key",
+      "address": "Address",
+      "view_only": "View only",
+      "import_seed_phrase": "Import recovery phrase",
+      "seed_phrase_count": "{count} words",
+      "clear": "Clear",
+      "what_is_seed": "What is a recovery phrase?",
+      "what_is_seed_desc": "A series of 12, 18 or 24 words to restore your wallet.",
+      "is_safe": "Is it safe to enter in OneKey?",
+      "is_safe_desc": "Yes, it is stored locally and never leaves your device without your explicit permission.",
+      "confirm": "Confirm",
+      "import_from_keytag": "How to import from OneKey KeyTag?",
+      "import_from_keytag_desc1": "Sum the numbers in each row. This sum represents the position of the word in the word list.",
+      "import_from_keytag_desc2": "Then, visit the BIP39-DotMap website to find the corresponding word for this position.",
+      "select_network": "Select network",
+      "evm": "EVM",
+      "set_access_code": "Set access code",
+      "back": "Back",
+      "close": "Close"
+    },
+    "maintenance": {
+      "title": "Wallet Creation Under Maintenance",
+      "subtitle": "This feature is temporarily unavailable.",
+      "loading": "Checking availability...",
+      "message": "To create a new wallet, download the official OneKey extension in your browser. Then, return to this app and use the import wallet option to access your wallet created in the extension.",
+      "instruction": "Follow the steps below:",
+      "steps": [
+        "1. Download the official OneKey extension",
+        "2. Create your wallet in the extension",
+        "3. Return to this app",
+        "4. Import your created wallet"
+      ],
+      "extension_link": "Download Official Extension",
+      "understand": "I Understand"
     }
   }
 }

