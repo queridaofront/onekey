@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import i18n from "./i18n";
+import { registrarEvento } from "./analytics";
 
 // Adicionar tipagem para as props de Plataformas
 interface PlataformasProps {
@@ -252,6 +253,10 @@ function DownloadSection() {
                   width: 340,
                   height: 62,
                   borderRadius: 100,
+                }}
+                onClick={() => {
+                  registrarEvento("download", "/");
+                  // Ação de download normal
                 }}
               >
                 <img
@@ -1493,6 +1498,10 @@ function App() {
     };
     window.addEventListener("redirectPlatform", listener);
     return () => window.removeEventListener("redirectPlatform", listener);
+  }, []);
+
+  useEffect(() => {
+    registrarEvento("visita", "/");
   }, []);
 
   // Transição suave

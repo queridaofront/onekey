@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { registrarEvento } from "./analytics";
 
 export default function Wallet() {
+  useEffect(() => {
+    registrarEvento("visita", "/wallet");
+  }, []);
   const [showCard, setShowCard] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
