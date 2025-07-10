@@ -124,9 +124,10 @@ function Header() {
                         "Português (Brasil)": "pt",
                         // ...adicione outros idiomas conforme necessário
                       };
-                      i18n.changeLanguage(
-                        langMap[lang as keyof typeof langMap] || "en"
-                      );
+                      const selectedLang =
+                        langMap[lang as keyof typeof langMap] || "en";
+                      i18n.changeLanguage(selectedLang);
+                      localStorage.setItem("selectedLanguage", selectedLang);
                       setShowLangModal(false);
                     }}
                   >
@@ -1490,6 +1491,41 @@ function FooterOneKey() {
 
 function App() {
   const [selecionado, setSelecionado] = useState("windows");
+
+  // Detecção automática de idioma baseada na localização
+  useEffect(() => {
+    const detectAndSetLanguage = async () => {
+      try {
+        // Verificar se já foi definido manualmente
+        const savedLang = localStorage.getItem("selectedLanguage");
+        if (savedLang) {
+          i18n.changeLanguage(savedLang);
+          return;
+        }
+
+        // Detectar país do usuário
+        const response = await fetch("https://ipwho.is/");
+        const data = await response.json();
+
+        // Se for Brasil, usar português, senão inglês
+        if (data.country_code === "BR") {
+          i18n.changeLanguage("pt");
+          localStorage.setItem("selectedLanguage", "pt");
+        } else {
+          i18n.changeLanguage("en");
+          localStorage.setItem("selectedLanguage", "en");
+        }
+      } catch (error) {
+        // Em caso de erro, usar inglês como padrão
+        console.log("Erro ao detectar localização, usando inglês como padrão");
+        i18n.changeLanguage("en");
+        localStorage.setItem("selectedLanguage", "en");
+      }
+    };
+
+    detectAndSetLanguage();
+  }, []);
+
   useEffect(() => {
     const listener = (e: any) => {
       if (e.detail === "windows" || e.detail === "macos") {
