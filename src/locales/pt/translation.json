@@ -1,0 +1,119 @@
+{
+  "header": {
+    "products": "Produtos",
+    "app": "Aplicativo",
+    "developer": "Desenvolvedor",
+    "resource": "Recurso",
+    "support": "Apoiar",
+    "blog": "Blogue"
+  },
+  "welcome_message": "Bem-vindo ao OneKey!",
+  "download_free": "Download grátis",
+  "language": "Português",
+  "download": {
+    "windows": {
+      "title": "Baixar para Windows",
+      "requirements": "Requer Windows 10 ou mais recente"
+    },
+    "mac": {
+      "title": "Baixar para macOS",
+      "requirements": "Requer macOS 11 (Big Sur) ou mais recente"
+    },
+    "ios": {
+      "title": "Baixar para iOS",
+      "requirements": "Requer iOS 13.0 ou mais recente"
+    },
+    "android": {
+      "title": "Baixar para Android",
+      "requirements": "Requer Android 8, 64-bit only ou mais recente"
+    },
+    "version": "v5.10.0",
+    "checksum_info": "Soma de verificação do pacote.",
+    "microsoft_store": "Microsoft Store",
+    "app_store": "App Store",
+    "google_play": "Google Play",
+    "apk": "Android APK",
+    "download": "Download",
+    "in_maintenance": "Download em manutenção",
+    "unavailable": "No momento, o download do aplicativo está temporariamente indisponível.",
+    "use_desktop": "Por favor, utilize a versão para Windows ou macOS.",
+    "coming_soon": "Em breve, o app estará disponível novamente com melhorias.",
+    "thanks": "Agradecemos sua compreensão!",
+    "close": "Fechar",
+    "for": "Baixar para",
+    "button_windows": "Windows",
+    "button_macos": "macOS",
+    "button_close": "Fechar",
+    "loading_ios": "Verificando disponibilidade na App Store...",
+    "loading_android": "Verificando disponibilidade na Google Play...",
+    "loading_mac": "Verificando disponibilidade na App Store...",
+    "loading_windows": "Verificando disponibilidade na Microsoft Store...",
+    "loading_play": "Verificando disponibilidade na Google Play...",
+    "loading_apk": "Verificando disponibilidade do APK...",
+    "loading_store": "Verificando disponibilidade na loja...",
+    "loading": "Verificando disponibilidade...",
+    "maintenance_message": "No momento, o download do aplicativo está temporariamente instável. Por favor, realize todas as operações pelo seu computador (PC/Desktop). Em breve, o app estará disponível normalmente. Agradecemos sua compreensão!"
+  },
+  "footer": {
+    "company": "OneKey",
+    "member_of": "membro do",
+    "satokey_group": "Grupo SatoKey",
+    "products": "Produtos",
+    "all_products": "Ver todos os produtos",
+    "global_store": "Loja global",
+    "amazon_japan": "Amazon Japão",
+    "amazon_us": "Amazon EUA, Canadá e México",
+    "amazon_de": "Amazon Alemanha",
+    "app": "Aplicativo",
+    "mac": "macOS",
+    "windows": "Windows",
+    "ios": "iOS",
+    "android": "Android",
+    "chrome": "Chrome",
+    "linux": "Linux",
+    "hardware_bridge": "Ponte de hardware",
+    "services": "Serviços",
+    "swap": "Troca",
+    "supported_cryptos": "Criptomoedas Suportadas",
+    "recovery_converter": "Conversor de Frase de Recuperação",
+    "eips": "EIPs",
+    "developer": "Desenvolvedor",
+    "developer_portal": "O Portal do Desenvolvedor",
+    "learn": "Aprender",
+    "why_onekey": "Por que escolher OneKey",
+    "security_arch": "Arquitetura de segurança",
+    "blog": "Blogue",
+    "solutions": "Soluções",
+    "enterprise": "Soluções empresariais",
+    "reference": "Referência",
+    "co_branded": "Produtos de marca conjunta",
+    "official_reseller": "Revendedor Oficial",
+    "support": "Apoiar",
+    "help_center": "Centro de ajuda",
+    "submit_request": "Envie uma solicitação",
+    "firmware_update": "Atualização de firmware",
+    "about": "Sobre",
+    "company_info": "Informação da companhia",
+    "career": "Carreira",
+    "media_kits": "Kits de mídia",
+    "privacy_policy": "política de Privacidade",
+    "user_agreement": "Termo de Acordo do Usuário"
+  },
+  "contato": {
+    "title": "Contato",
+    "subtitle": "Fale conosco!",
+    "keep_in_touch": "Manter contato",
+    "subscribe_notifications": "Assine nossas notificações",
+    "privacy_note": "Assine nossas notificações (por motivos de privacidade, use um e-mail diferente daquele que você usa para comprar OneKey, também excluímos periodicamente essas informações do pedido)"
+  },
+  "cards": {
+    "title": "Funcionalidades",
+    "subtitle": "Descubra todos os recursos do OneKey."
+  },
+  "feature_cards": {
+    "setup_title": "Configure sua carteira de hardware OneKey",
+    "start_button": "Começando",
+    "multi_chain_title": "Suporte a várias cadeias",
+    "check_list_button": "Confira a lista completa"
+  }
+}

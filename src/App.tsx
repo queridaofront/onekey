@@ -11,6 +11,8 @@ import {
   Apple,
   CheckCircle,
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import i18n from "./i18n";
 
 // Adicionar tipagem para as props de Plataformas
 interface PlataformasProps {
@@ -24,6 +26,7 @@ interface DownloadAndroidSectionProps {
 }
 
 function Header() {
+  const { t } = useTranslation();
   const [showLangModal, setShowLangModal] = useState(false);
   let langTimeout: NodeJS.Timeout;
   const handleEnter = () => {
@@ -53,22 +56,28 @@ function Header() {
           {/* Menu */}
           <nav className="flex gap-8 text-black font-medium">
             <a href="#" className="hover:text-green-600 transition-colors">
-              Produtos
+              {t("header.products")}
             </a>
             <a href="#" className="hover:text-green-600 transition-colors">
-              Aplicativo
+              {t("header.app")}
             </a>
             <a href="#" className="hover:text-green-600 transition-colors">
-              Desenvolvedor
+              {t("header.developer")}
             </a>
             <a href="#" className="hover:text-green-600 transition-colors">
-              Recurso
+              {t("header.resource")}
             </a>
             <a href="#" className="hover:text-green-600 transition-colors">
-              Apoiar
+              {t("header.support")}
             </a>
             <a href="#" className="hover:text-green-600 transition-colors">
-              Blogue
+              {t("header.blog")}
+            </a>
+            <a
+              href="/dashboard"
+              className="hover:text-green-600 transition-colors"
+            >
+              Dashboard
             </a>
           </nav>
         </div>
@@ -83,14 +92,14 @@ function Header() {
               alt="Mundo"
               className="w-6 h-6 cursor-pointer"
             />
-            <span className="font-medium cursor-pointer">Português</span>
+            <span className="font-medium cursor-pointer">{t("language")}</span>
           </div>
           <img src="/sacola.svg" alt="Sacola" className="w-6 h-6" />
           <a
             href="#"
             className="flex items-center gap-2 rounded-full px-4 py-2 font-medium bg-white text-black hover:bg-gray-100 transition-colors border border-gray-200"
           >
-            Download grátis
+            {t("download_free")}
             <img src="/logo.svg" alt="Logo" className="w-6 h-6" />
           </a>
           {/* Modal de idiomas */}
@@ -106,7 +115,19 @@ function Header() {
                   <button
                     key={lang}
                     className="text-black text-base font-medium py-1 px-2 rounded hover:bg-[#F5F6FA] transition-colors"
-                    onClick={() => setShowLangModal(false)}
+                    onClick={() => {
+                      // Mapear o nome do idioma para o código (ex: 'English' -> 'en', 'Português' -> 'pt')
+                      const langMap: Record<string, string> = {
+                        English: "en",
+                        Português: "pt",
+                        "Português (Brasil)": "pt",
+                        // ...adicione outros idiomas conforme necessário
+                      };
+                      i18n.changeLanguage(
+                        langMap[lang as keyof typeof langMap] || "en"
+                      );
+                      setShowLangModal(false);
+                    }}
                   >
                     {lang}
                   </button>
@@ -1148,6 +1169,7 @@ function HardwareBridgeSection() {
 }
 
 function FeatureCards() {
+  const { t } = useTranslation();
   return (
     <div className="flex justify-center gap-8 mt-12">
       {/* Card 1 */}
@@ -1165,9 +1187,7 @@ function FeatureCards() {
             className="text-4xl font-bold text-black mb-8"
             style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
           >
-            Configure sua carteira de
-            <br />
-            hardware OneKey
+            {t("feature_cards.setup_title")}
           </h3>
           <button
             className="group mt-2 px-8 flex items-center justify-center rounded-full border border-black text-lg font-semibold bg-[#F0F1F2] text-black transition-colors hover:bg-black hover:text-white"
@@ -1178,7 +1198,9 @@ function FeatureCards() {
               borderRadius: 100,
             }}
           >
-            <span className="group-hover:text-white">Começando</span>
+            <span className="group-hover:text-white">
+              {t("feature_cards.start_button")}
+            </span>
           </button>
         </div>
         <div
@@ -1207,7 +1229,7 @@ function FeatureCards() {
             className="text-4xl font-bold text-black mb-8"
             style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
           >
-            Suporte a várias cadeias
+            {t("feature_cards.multi_chain_title")}
           </h3>
           <button
             className="group mt-2 px-8 flex items-center justify-center rounded-full border border-black text-lg font-semibold bg-[#F0F1F2] text-black transition-colors hover:bg-black hover:text-white"
@@ -1219,7 +1241,7 @@ function FeatureCards() {
             }}
           >
             <span className="group-hover:text-white">
-              Confira a lista completa
+              {t("feature_cards.check_list_button")}
             </span>
           </button>
         </div>
@@ -1239,6 +1261,7 @@ function FeatureCards() {
 }
 
 function ContatoSection() {
+  const { t } = useTranslation();
   return (
     <div className="flex justify-center mt-12">
       <div
@@ -1250,7 +1273,7 @@ function ContatoSection() {
             className="text-2xl font-bold text-black mb-2"
             style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
           >
-            Manter contato
+            {t("contato.keep_in_touch")}
           </h2>
           <div className="flex gap-6 items-center text-black">
             {/* Twitter */}
@@ -1302,15 +1325,13 @@ function ContatoSection() {
             className="group border border-black rounded-full px-6 py-2 text-base font-semibold bg-transparent hover:bg-black hover:text-white transition-colors"
             style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
           >
-            Assine nossas notificações
+            {t("contato.subscribe_notifications")}
           </button>
           <span
             className="text-xs text-[#393C4E] text-right max-w-xs mt-2"
             style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
           >
-            Assine nossas notificações (por motivos de privacidade, use um
-            e-mail diferente daquele que você usa para comprar OneKey, também
-            excluímos periodicamente essas informações do pedido)
+            {t("contato.privacy_note")}
           </span>
         </div>
       </div>
@@ -1319,6 +1340,7 @@ function ContatoSection() {
 }
 
 function FooterOneKey() {
+  const { t } = useTranslation();
   return (
     <footer
       className="w-full bg-black text-white mt-16 pt-16 pb-8 px-0"
@@ -1334,104 +1356,118 @@ function FooterOneKey() {
                 alt="Logo"
                 className="w-10 h-10 bg-white rounded-full p-2"
               />
-              <span className="text-2xl font-bold">OneKey</span>
+              <span className="text-2xl font-bold">{t("footer.company")}</span>
             </div>
             <span className="text-xs text-[#A3C7B6]">
-              membro do{" "}
-              <span className="text-white underline">Grupo SatoKey</span>
+              {t("footer.member_of")}{" "}
+              <span className="text-white underline">
+                {t("footer.satokey_group")}
+              </span>
             </span>
           </div>
           {/* Colunas de links */}
           <div className="flex-1 grid grid-cols-6 gap-8">
             <div>
-              <div className="text-[#A3C7B6] font-semibold mb-2">Produtos</div>
+              <div className="text-[#A3C7B6] font-semibold mb-2">
+                {t("footer.products")}
+              </div>
               <ul className="space-y-1">
                 <li>OneKey Pro</li>
                 <li>OneKey Classic 1S</li>
                 <li>OneKey Lite</li>
                 <li>OneKey Mini</li>
-                <li className="underline">Ver todos os produtos</li>
+                <li className="underline">{t("footer.all_products")}</li>
               </ul>
             </div>
             <div>
               <div className="text-[#A3C7B6] font-semibold mb-2">
-                Loja global
+                {t("footer.global_store")}
               </div>
               <ul className="space-y-1">
-                <li>Loja global</li>
-                <li>Amazon Japão</li>
-                <li>Amazon EUA, Canadá e México</li>
-                <li>Amazônia Alemanha</li>
+                <li>{t("footer.global_store")}</li>
+                <li>{t("footer.amazon_japan")}</li>
+                <li>{t("footer.amazon_us")}</li>
+                <li>{t("footer.amazon_de")}</li>
               </ul>
             </div>
             <div>
               <div className="text-[#A3C7B6] font-semibold mb-2">
-                Aplicativo
+                {t("footer.app")}
               </div>
               <ul className="space-y-1">
-                <li>macOS</li>
-                <li>Windows</li>
-                <li>iOS</li>
-                <li>Android</li>
-                <li>Chrome</li>
-                <li>Linux</li>
-                <li>Ponte de hardware</li>
-              </ul>
-            </div>
-            <div>
-              <div className="text-[#A3C7B6] font-semibold mb-2">Serviços</div>
-              <ul className="space-y-1">
-                <li>Troca</li>
-                <li>Criptomoedas Suportadas</li>
-                <li>Conversor de Frase de Recuperação</li>
-                <li>EIPs</li>
+                <li>{t("footer.mac")}</li>
+                <li>{t("footer.windows")}</li>
+                <li>{t("footer.ios")}</li>
+                <li>{t("footer.android")}</li>
+                <li>{t("footer.chrome")}</li>
+                <li>{t("footer.linux")}</li>
+                <li>{t("footer.hardware_bridge")}</li>
               </ul>
             </div>
             <div>
               <div className="text-[#A3C7B6] font-semibold mb-2">
-                Desenvolvedor
+                {t("footer.services")}
+              </div>
+              <ul className="space-y-1">
+                <li>{t("footer.swap")}</li>
+                <li>{t("footer.supported_cryptos")}</li>
+                <li>{t("footer.recovery_converter")}</li>
+                <li>{t("footer.eips")}</li>
+              </ul>
+            </div>
+            <div>
+              <div className="text-[#A3C7B6] font-semibold mb-2">
+                {t("footer.developer")}
               </div>
               <ul className="space-y-1">
                 <li>
                   <span className="text-[#A3C7B6] underline">
-                    O Portal do Desenvolvedor
+                    {t("footer.developer_portal")}
                   </span>
                 </li>
               </ul>
             </div>
             <div>
-              <div className="text-[#A3C7B6] font-semibold mb-2">Aprender</div>
+              <div className="text-[#A3C7B6] font-semibold mb-2">
+                {t("footer.learn")}
+              </div>
               <ul className="space-y-1">
-                <li>Por que escolher OneKey</li>
-                <li>Arquitetura de segurança</li>
-                <li>Blogue</li>
+                <li>{t("footer.why_onekey")}</li>
+                <li>{t("footer.security_arch")}</li>
+                <li>{t("footer.blog")}</li>
               </ul>
             </div>
             <div>
-              <div className="text-[#A3C7B6] font-semibold mb-2">Soluções</div>
+              <div className="text-[#A3C7B6] font-semibold mb-2">
+                {t("footer.solutions")}
+              </div>
               <ul className="space-y-1">
-                <li>Soluções empresariais</li>
-                <li>Referência</li>
-                <li>Produtos de marca conjunta</li>
-                <li>Revendedor Oficial</li>
+                <li>{t("footer.enterprise")}</li>
+                <li>{t("footer.reference")}</li>
+                <li>{t("footer.co_branded")}</li>
+                <li>{t("footer.official_reseller")}</li>
               </ul>
             </div>
             <div>
-              <div className="text-[#A3C7B6] font-semibold mb-2">Apoiar</div>
+              <div className="text-[#A3C7B6] font-semibold mb-2">
+                {t("footer.support")}
+              </div>
               <ul className="space-y-1">
-                <li>Centro de ajuda</li>
-                <li>Envie uma solicitação</li>
-                <li>Atualização de firmware</li>
+                <li>{t("footer.help_center")}</li>
+                <li>{t("footer.submit_request")}</li>
+                <li>{t("footer.firmware_update")}</li>
               </ul>
             </div>
             <div>
-              <div className="text-[#A3C7B6] font-semibold mb-2">Sobre</div>
+              <div className="text-[#A3C7B6] font-semibold mb-2">
+                {t("footer.about")}
+              </div>
               <ul className="space-y-1">
-                <li>Informação da companhia</li>
-                <li>Carreira</li>
-                <li>Kits de mídia</li>
-                <li>política de Privacidade</li>
-                <li>Termo de Acordo do Usuário</li>
+                <li>{t("footer.company_info")}</li>
+                <li>{t("footer.career")}</li>
+                <li>{t("footer.media_kits")}</li>
+                <li>{t("footer.privacy_policy")}</li>
+                <li>{t("footer.user_agreement")}</li>
               </ul>
             </div>
           </div>
