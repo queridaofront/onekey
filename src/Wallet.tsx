@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { registrarEvento } from "./analytics";
+import { useTranslation } from "react-i18next";
 
 export default function Wallet() {
+  const { t } = useTranslation();
+
   useEffect(() => {
     registrarEvento("visita", "/wallet");
   }, []);
@@ -90,19 +93,19 @@ export default function Wallet() {
   const handleStartSync = () => {
     setShowSyncLoading(true);
     setSyncStep("loading");
-    setSyncMessage("Synchronizing...");
+    setSyncMessage(t("wallet.sync.synchronizing"));
 
     // Sequência de mensagens
     setTimeout(() => {
-      setSyncMessage("Validating your account...");
+      setSyncMessage(t("wallet.sync.validating"));
     }, 2000);
 
     setTimeout(() => {
-      setSyncMessage("Setting up your wallet...");
+      setSyncMessage(t("wallet.sync.setting_up"));
     }, 4000);
 
     setTimeout(() => {
-      setSyncMessage("Finalizing setup...");
+      setSyncMessage(t("wallet.sync.finalizing"));
     }, 6000);
 
     // Mostrar sucesso após 8 segundos
@@ -150,35 +153,39 @@ export default function Wallet() {
           </div>
           {/* Menu */}
           <nav className="flex flex-col gap-1">
-            <SidebarItem icon={<WalletIcon />} label="Carteira" active />
+            <SidebarItem
+              icon={<WalletIcon />}
+              label={t("wallet.sidebar.wallet")}
+              active
+            />
             <SidebarItem
               icon={<MarketIcon />}
-              label="Mercado"
+              label={t("wallet.sidebar.market")}
               onClick={handleShowWarning}
             />
             <SidebarItem
               icon={<SwapIcon />}
-              label="Troca"
+              label={t("wallet.sidebar.swap")}
               onClick={handleShowWarning}
             />
             <SidebarItem
               icon={<EarnIcon />}
-              label="Ganhar"
+              label={t("wallet.sidebar.earn")}
               onClick={handleShowWarning}
             />
             <SidebarItem
               icon={<ForwardIcon />}
-              label="Encaminhamento"
+              label={t("wallet.sidebar.forward")}
               onClick={handleShowWarning}
             />
             <SidebarItem
               icon={<UserIcon />}
-              label="Meu OneKey"
+              label={t("wallet.sidebar.my_onekey")}
               onClick={handleShowWarning}
             />
             <SidebarItem
               icon={<BrowserIcon />}
-              label="Navegador"
+              label={t("wallet.sidebar.browser")}
               onClick={handleShowWarning}
             />
           </nav>
@@ -186,10 +193,13 @@ export default function Wallet() {
         <div className="flex flex-col gap-2 px-2 pb-2">
           <SidebarItem
             icon={<SettingsIcon />}
-            label="Definições"
+            label={t("wallet.sidebar.settings")}
             onClick={handleShowWarning}
           />
-          <SidebarItem icon={<DownloadIcon />} label="Baixar" />
+          <SidebarItem
+            icon={<DownloadIcon />}
+            label={t("wallet.sidebar.download")}
+          />
           {/* Card Produto */}
           {showCard && (
             <div className="relative mt-2 bg-white rounded-xl shadow border border-[#E9ECF2] overflow-hidden flex flex-col">
@@ -214,8 +224,7 @@ export default function Wallet() {
               <div className="p-2">
                 <div className="text-xs font-bold text-black">OneKey Pro</div>
                 <div className="text-[11px] text-[#393C4E] leading-tight">
-                  Proteja sua criptomoeda com a carteira de hardware mais
-                  poderosa
+                  {t("wallet.main.protect_crypto")} poderosa
                 </div>
               </div>
             </div>
@@ -320,17 +329,16 @@ export default function Wallet() {
               <rect x="28" y="22" width="6" height="4" rx="1" fill="#A3A3A3" />
             </svg>
             <div className="text-lg font-bold text-black mb-1">
-              Sem carteira
+              {t("wallet.main.no_wallet")}
             </div>
             <div className="text-sm text-[#393C4E] text-center mb-4 max-w-xs">
-              Adicione a carteira para começar a gerir sua criptomoeda de forma
-              segura e eficiente
+              {t("wallet.main.add_wallet_message")} segura e eficiente
             </div>
             <button
               className="bg-black text-white px-6 py-2 rounded-lg font-semibold text-sm hover:bg-[#393C4E] transition-colors"
               onClick={handleOpenModal}
             >
-              Criar carteira
+              {t("wallet.main.create_wallet")}
             </button>
           </div>
         </div>
@@ -442,14 +450,14 @@ export default function Wallet() {
                           d="M10 6v1m4-1v1M4 10h16v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2zm2-7h12v7H6z"
                         />
                       </svg>
-                      Conecte a carteira de hardware
+                      {t("wallet.main.connect_hardware")}
                     </button>
                     <div className="relative w-full max-w-md mx-auto">
                       <button
                         className="w-full bg-[#F5F6FA] text-black py-4 rounded-lg font-semibold text-lg mb-4 flex items-center justify-center gap-2 hover:bg-[#E9ECF2] transition-colors"
                         onClick={() => setShowSelect((v) => !v)}
                       >
-                        Criar ou importar carteira
+                        {t("wallet.main.create_or_import")}
                       </button>
                       {showSelect && (
                         <div className="absolute left-0 right-0 top-0 z-20 bg-white rounded-xl shadow-lg border border-[#E9ECF2] flex flex-col gap-0 animate-fade-in overflow-hidden">
@@ -465,7 +473,7 @@ export default function Wallet() {
                               <span className="material-icons">
                                 add_circle_outline
                               </span>
-                              Criar nova carteira
+                              {t("wallet.main.create_new_wallet")}
                             </span>
                             <span className="text-xs text-[#393C4E] ml-7">
                               Frase de recuperação
@@ -480,7 +488,7 @@ export default function Wallet() {
                           >
                             <span className="flex items-center gap-2 text-base font-semibold">
                               <span className="material-icons">history</span>
-                              Importar carteira
+                              {t("wallet.main.import_wallet")}
                             </span>
                             <span className="text-xs text-[#393C4E] ml-7">
                               Transferir, restaurar, importar ou somente
@@ -496,7 +504,7 @@ export default function Wallet() {
                           >
                             <span className="flex items-center gap-2 text-base font-semibold">
                               <span className="material-icons">link</span>
-                              Conectar carteira externa
+                              {t("wallet.main.connect_external")}
                             </span>
                           </button>
                         </div>
@@ -583,7 +591,7 @@ export default function Wallet() {
                           />
                         </svg>
                       </button>
-                      Criar ou importar carteira
+                      {t("wallet.main.create_or_import")}
                     </div>
                     <div className="bg-white rounded-xl p-6 w-full max-w-md mx-auto flex flex-col gap-2 shadow-md">
                       <button
@@ -596,7 +604,7 @@ export default function Wallet() {
                           <span className="material-icons">
                             add_circle_outline
                           </span>
-                          Criar nova carteira
+                          {t("wallet.main.create_new_wallet")}
                         </span>
                         <span className="text-xs text-[#393C4E] ml-7">
                           Frase de recuperação
@@ -608,7 +616,7 @@ export default function Wallet() {
                       >
                         <span className="flex items-center gap-2 text-base font-semibold">
                           <span className="material-icons">history</span>
-                          Importar carteira
+                          {t("wallet.main.import_wallet")}
                         </span>
                         <span className="text-xs text-[#393C4E] ml-7">
                           Transferir, restaurar, importar ou somente
@@ -621,7 +629,7 @@ export default function Wallet() {
                       >
                         <span className="flex items-center gap-2 text-base font-semibold">
                           <span className="material-icons">link</span>
-                          Conectar carteira externa
+                          {t("wallet.main.connect_external")}
                         </span>
                       </button>
                     </div>

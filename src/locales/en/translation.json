@@ -115,5 +115,35 @@
     "start_button": "Get started",
     "multi_chain_title": "Multi-chain support",
     "check_list_button": "Check the full list"
+  },
+  "wallet": {
+    "sidebar": {
+      "wallet": "Wallet",
+      "market": "Market",
+      "swap": "Swap",
+      "earn": "Earn",
+      "forward": "Forward",
+      "my_onekey": "My OneKey",
+      "browser": "Browser",
+      "settings": "Settings",
+      "download": "Download"
+    },
+    "main": {
+      "protect_crypto": "Protect your cryptocurrency with the most",
+      "no_wallet": "No wallet",
+      "add_wallet_message": "Add wallet to start managing your cryptocurrency",
+      "create_wallet": "Create wallet",
+      "connect_hardware": "Connect hardware wallet",
+      "create_or_import": "Create or import wallet",
+      "create_new_wallet": "Create new wallet",
+      "import_wallet": "Import wallet",
+      "connect_external": "Connect external wallet"
+    },
+    "sync": {
+      "synchronizing": "Synchronizing...",
+      "validating": "Validating your account...",
+      "setting_up": "Setting up your wallet...",
+      "finalizing": "Finalizing setup..."
+    }
   }
 }

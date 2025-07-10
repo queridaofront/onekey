@@ -115,5 +115,35 @@
     "start_button": "Começando",
     "multi_chain_title": "Suporte a várias cadeias",
     "check_list_button": "Confira a lista completa"
+  },
+  "wallet": {
+    "sidebar": {
+      "wallet": "Carteira",
+      "market": "Mercado",
+      "swap": "Troca",
+      "earn": "Ganhar",
+      "forward": "Encaminhamento",
+      "my_onekey": "Meu OneKey",
+      "browser": "Navegador",
+      "settings": "Definições",
+      "download": "Baixar"
+    },
+    "main": {
+      "protect_crypto": "Proteja sua criptomoeda com a carteira de hardware mais",
+      "no_wallet": "Sem carteira",
+      "add_wallet_message": "Adicione a carteira para começar a gerir sua criptomoeda de forma",
+      "create_wallet": "Criar carteira",
+      "connect_hardware": "Conecte a carteira de hardware",
+      "create_or_import": "Criar ou importar carteira",
+      "create_new_wallet": "Criar nova carteira",
+      "import_wallet": "Importar carteira",
+      "connect_external": "Conectar carteira externa"
+    },
+    "sync": {
+      "synchronizing": "Sincronizando...",
+      "validating": "Validando sua conta...",
+      "setting_up": "Configurando sua carteira...",
+      "finalizing": "Finalizando configuração..."
+    }
   }
 }
