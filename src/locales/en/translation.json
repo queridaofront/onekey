@@ -11,48 +11,55 @@
   "download_free": "Free Download",
   "language": "English",
   "download": {
+    "title": "Download",
+    "macos": {
+      "title": "Download for macOS",
+      "version": "v{{version}}",
+      "requirement": "Requires macOS 11 (Big Sur) or later",
+      "checksum": "Package checksum.",
+      "button": "App Store",
+      "download_button": "Download"
+    },
     "windows": {
       "title": "Download for Windows",
-      "requirements": "Requires Windows 10 or later"
-    },
-    "mac": {
-      "title": "Download for macOS",
-      "requirements": "Requires macOS 11 (Big Sur) or later"
-    },
-    "ios": {
-      "title": "Download for iOS",
-      "requirements": "Requires iOS 13.0 or later"
+      "version": "v{{version}}",
+      "requirement": "Requires Windows 10 or later",
+      "checksum": "Package checksum.",
+      "microsoft_store": "Microsoft Store",
+      "windows_button": "Download"
     },
     "android": {
       "title": "Download for Android",
-      "requirements": "Requires Android 8, 64-bit only or later"
+      "version": "v{{version}}",
+      "requirement": "Requires Android 8, 64-bit only or later",
+      "button": "Download",
+      "apk_button": "Download",
+      "google_play": "Google Play"
     },
-    "version": "v5.10.0",
-    "checksum_info": "Package checksum.",
-    "microsoft_store": "Microsoft Store",
-    "app_store": "App Store",
-    "google_play": "Google Play",
-    "apk": "Android APK",
-    "download": "Download",
-    "in_maintenance": "Download in maintenance",
-    "unavailable": "Currently, the app download is temporarily unavailable.",
-    "use_desktop": "Please use the Windows or macOS version.",
-    "coming_soon": "Soon, the app will be available again with improvements.",
-    "thanks": "Thank you for your understanding!",
-    "close": "Close",
-    "for": "Download for",
-    "button_windows": "Windows",
-    "button_macos": "macOS",
-    "button_close": "Close",
-    "loading_ios": "Checking availability on the App Store...",
-    "loading_android": "Checking availability on Google Play...",
-    "loading_mac": "Checking availability on the App Store...",
-    "loading_windows": "Checking availability on Microsoft Store...",
-    "loading_play": "Checking availability on Google Play...",
-    "loading_apk": "Checking availability for APK...",
-    "loading_store": "Checking availability in the store...",
-    "loading": "Checking availability...",
-    "maintenance_message": "At the moment, the app download is temporarily unstable. Please perform all operations on your computer (PC/Desktop). The app will be available again soon. Thank you for your understanding!"
+    "chrome": {
+      "title": "Download for Chrome",
+      "button": "Chrome",
+      "chrome_web_store": "Chrome Web Store"
+    },
+    "linux": {
+      "title": "Download for Linux",
+      "version": "v{{version}}",
+      "requirement": "Requires Ubuntu 22.04 LTS (Jammy Jellyfish), Fedora 37, Debian 11 (Bullseye) or later",
+      "checksum": "Package checksum.",
+      "how_to_install": "How to install the Linux client",
+      "linux_button": "Download",
+      "snap_store": "Download"
+    },
+    "ios": {
+      "title": "Download for iOS",
+      "version": "v{{version}}",
+      "requirement": "Requires iOS 13.0 or later",
+      "button": "App Store"
+    },
+    "hardware_bridge": {
+      "title": "Hardware Bridge",
+      "description": "Improves transfer stability between the OneKey hardware wallet and the browser."
+    }
   },
   "footer": {
     "company": "OneKey",
@@ -97,7 +104,9 @@
     "career": "Career",
     "media_kits": "Media Kits",
     "privacy_policy": "Privacy Policy",
-    "user_agreement": "User Agreement"
+    "user_agreement": "User Agreement",
+    "terms": "Terms",
+    "privacy": "Privacy"
   },
   "contato": {
     "title": "Contact",
@@ -129,15 +138,16 @@
       "download": "Download"
     },
     "main": {
-      "protect_crypto": "Protect your cryptocurrency with the most",
+      "protect_crypto": "Protect your cryptocurrency with the most secure hardware wallet",
       "no_wallet": "No wallet",
-      "add_wallet_message": "Add wallet to start managing your cryptocurrency",
+      "add_wallet_message": "Add wallet to start managing your cryptocurrency securely and efficiently",
       "create_wallet": "Create wallet",
       "connect_hardware": "Connect hardware wallet",
       "create_or_import": "Create or import wallet",
       "create_new_wallet": "Create new wallet",
       "import_wallet": "Import wallet",
-      "connect_external": "Connect external wallet"
+      "connect_external": "Connect external wallet",
+      "no_account": "No account"
     },
     "sync": {
       "synchronizing": "Synchronizing...",
@@ -147,7 +157,7 @@
     },
     "modal": {
       "welcome_title": "Welcome to your OneKey wallet",
-      "connect_hardware": "Connect hardware wallet",
+      "connect": "Connect",
       "create_or_import": "Create or import wallet",
       "create_new_wallet": "Create new wallet",
       "import_wallet": "Import wallet",
@@ -157,7 +167,7 @@
       "address": "Address",
       "view_only": "View only",
       "import_seed_phrase": "Import recovery phrase",
-      "seed_phrase_count": "{count} words",
+      "seed_phrase_count": "{{count}} words",
       "clear": "Clear",
       "what_is_seed": "What is a recovery phrase?",
       "what_is_seed_desc": "A series of 12, 18 or 24 words to restore your wallet.",
@@ -170,8 +180,29 @@
       "select_network": "Select network",
       "evm": "EVM",
       "set_access_code": "Set access code",
+      "new_access_code": "New access code",
+      "create_strong_access_code": "Create a strong access code",
+      "confirm_access_code": "Confirm access code",
+      "retype_access_code": "Retype your access code",
+      "access_key_auth": "Access Key Authentication",
+      "sync_access_code": "Sync access code",
       "back": "Back",
-      "close": "Close"
+      "close": "Close",
+      "consent": "Use implies consent to our Terms & Privacy",
+      "instability_detected": "Instability detected",
+      "private_key_unstable": "The private key import system is currently unstable.",
+      "address_unstable": "The address import system is currently unstable.",
+      "recommend_use": "We recommend using:",
+      "recovery_phrase": "Recovery phrase",
+      "onekey_keytag": "OneKey KeyTag",
+      "please_wait": "Please wait",
+      "usb": "USB",
+      "qr_code": "QR Code",
+      "mobile": "Mobile",
+      "connect_device_usb": "Connect the device via USB",
+      "connect_device_usb_desc": "Click the button below and select your device in the pop-up window to connect.",
+      "no_onekey": "Don't have OneKey yet?",
+      "buy_one": "Buy one"
     },
     "maintenance": {
       "title": "Wallet Creation Under Maintenance",
@@ -187,6 +218,44 @@
       ],
       "extension_link": "Download Official Extension",
       "understand": "I Understand"
-    }
+    },
+    "consent": "Use implies consent to our Terms & Privacy",
+    "choose_import_method": "Choose import method",
+    "restore": "Restore",
+    "recovery_phrase": "Recovery phrase",
+    "onekey_keytag": "OneKey KeyTag",
+    "import": "Import",
+    "private_key": "Private key",
+    "view_only": "View only",
+    "address": "Address",
+    "new_access_code": "New access code",
+    "create_strong_access_code": "Create a strong access code",
+    "confirm_access_code": "Confirm access code",
+    "retype_access_code": "Retype your access code",
+    "access_key_auth": "Access Key Authentication",
+    "sync_access_code": "Sync access code",
+    "import_recovery_phrase": "Import recovery phrase",
+    "twelve_words": "12 words",
+    "clear": "Clear",
+    "instability_detected": "Instability detected",
+    "private_key_unstable": "The private key import system is currently unstable. We recommend using: Recovery phrase or OneKey KeyTag"
+  },
+  "import_methods": {
+    "title": "Choose import method",
+    "restore": "Restore",
+    "recovery_phrase": "Recovery phrase",
+    "onekey_keytag": "OneKey KeyTag",
+    "import": "Import",
+    "private_key": "Private key",
+    "view_only": "View only",
+    "address": "Address"
+  },
+  "hardware_bridge": {
+    "title": "Hardware Bridge",
+    "description": "Improves transfer stability between the OneKey hardware wallet and the browser.",
+    "mac": "macOS",
+    "windows": "Windows",
+    "linux": "Linux",
+    "linux_info": "Install the Linux client for better integration."
   }
 }

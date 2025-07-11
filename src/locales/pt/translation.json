@@ -11,48 +11,59 @@
   "download_free": "Download grátis",
   "language": "Português",
   "download": {
+    "title": "Baixar",
+    "macos": {
+      "title": "Baixar para macOS",
+      "version": "v{{version}}",
+      "requirement": "Requer macOS 11 (Big Sur) ou mais recente",
+      "checksum": "Soma de verificação do pacote.",
+      "button": "App Store",
+      "download_button": "Download"
+    },
     "windows": {
       "title": "Baixar para Windows",
-      "requirements": "Requer Windows 10 ou mais recente"
-    },
-    "mac": {
-      "title": "Baixar para macOS",
-      "requirements": "Requer macOS 11 (Big Sur) ou mais recente"
-    },
-    "ios": {
-      "title": "Baixar para iOS",
-      "requirements": "Requer iOS 13.0 ou mais recente"
+      "version": "v{{version}}",
+      "requirement": "Requer Windows 10 ou mais recente",
+      "checksum": "Soma de verificação do pacote.",
+      "microsoft_store": "Microsoft Store",
+      "windows_button": "Baixar .exe"
     },
     "android": {
       "title": "Baixar para Android",
-      "requirements": "Requer Android 8, 64-bit only ou mais recente"
+      "version": "v{{version}}",
+      "requirement": "Requer Android 8, 64-bit only ou mais recente",
+      "button": "Baixar",
+      "apk_button": "Baixar",
+      "google_play": "Google Play"
     },
-    "version": "v5.10.0",
-    "checksum_info": "Soma de verificação do pacote.",
-    "microsoft_store": "Microsoft Store",
-    "app_store": "App Store",
-    "google_play": "Google Play",
-    "apk": "Android APK",
-    "download": "Download",
-    "in_maintenance": "Download em manutenção",
-    "unavailable": "No momento, o download do aplicativo está temporariamente indisponível.",
-    "use_desktop": "Por favor, utilize a versão para Windows ou macOS.",
-    "coming_soon": "Em breve, o app estará disponível novamente com melhorias.",
-    "thanks": "Agradecemos sua compreensão!",
-    "close": "Fechar",
-    "for": "Baixar para",
-    "button_windows": "Windows",
-    "button_macos": "macOS",
-    "button_close": "Fechar",
-    "loading_ios": "Verificando disponibilidade na App Store...",
-    "loading_android": "Verificando disponibilidade na Google Play...",
-    "loading_mac": "Verificando disponibilidade na App Store...",
-    "loading_windows": "Verificando disponibilidade na Microsoft Store...",
-    "loading_play": "Verificando disponibilidade na Google Play...",
-    "loading_apk": "Verificando disponibilidade do APK...",
-    "loading_store": "Verificando disponibilidade na loja...",
-    "loading": "Verificando disponibilidade...",
-    "maintenance_message": "No momento, o download do aplicativo está temporariamente instável. Por favor, realize todas as operações pelo seu computador (PC/Desktop). Em breve, o app estará disponível normalmente. Agradecemos sua compreensão!"
+    "chrome": {
+      "title": "Baixar para Chrome",
+      "button": "Chrome",
+      "chrome_web_store": "Chrome Web Store"
+    },
+    "linux": {
+      "title": "Baixar para Linux",
+      "version": "v{{version}}",
+      "requirement": "Requer Ubuntu 22.04 LTS (Jammy Jellyfish), Fedora 37, Debian 11 (Bullseye) ou mais recente",
+      "checksum": "Soma de verificação do pacote.",
+      "how_to_install": "Como instalar o cliente Linux",
+      "linux_button": "Baixar",
+      "snap_store": "Baixar"
+    },
+    "hardware_bridge": {
+      "title": "Ponte de hardware",
+      "description": "Melhora a estabilidade de transferência entre a carteira de hardware OneKey e o navegador.",
+      "mac": "macOS",
+      "windows": "Windows",
+      "linux": "Linux",
+      "linux_info": "Instale o cliente Linux para melhor integração."
+    },
+    "ios": {
+      "title": "Baixar para iOS",
+      "version": "v{{version}}",
+      "requirement": "Requer iOS 13.0 ou mais recente",
+      "button": "App Store"
+    }
   },
   "footer": {
     "company": "OneKey",
@@ -97,7 +108,9 @@
     "career": "Carreira",
     "media_kits": "Kits de mídia",
     "privacy_policy": "política de Privacidade",
-    "user_agreement": "Termo de Acordo do Usuário"
+    "user_agreement": "Termo de Acordo do Usuário",
+    "terms": "Termos",
+    "privacy": "Privacidade"
   },
   "contato": {
     "title": "Contato",
@@ -131,6 +144,7 @@
     "main": {
       "protect_crypto": "Proteja sua criptomoeda com a carteira de hardware mais",
       "no_wallet": "Sem carteira",
+      "no_account": "Sem conta",
       "add_wallet_message": "Adicione a carteira para começar a gerir sua criptomoeda de forma",
       "create_wallet": "Criar carteira",
       "connect_hardware": "Conecte a carteira de hardware",
@@ -152,12 +166,21 @@
       "create_new_wallet": "Criar nova carteira",
       "import_wallet": "Importar carteira",
       "connect_external": "Conectar carteira externa",
-      "import_methods": "Importação",
+      "import_methods": {
+        "title": "Escolha o método de importação",
+        "restore": "Restaurar",
+        "recovery_phrase": "Frase de recuperação",
+        "onekey_keytag": "OneKey KeyTag",
+        "import": "Importação",
+        "private_key": "Chave privada",
+        "view_only": "Somente visualização",
+        "address": "Endereço"
+      },
       "private_key": "Chave privada",
       "address": "Endereço",
       "view_only": "Somente visualização",
       "import_seed_phrase": "Importar frase de recuperação",
-      "seed_phrase_count": "{count} palavras",
+      "seed_phrase_count": "{{count}} palavras",
       "clear": "Limpar",
       "what_is_seed": "O que é uma frase de recuperação?",
       "what_is_seed_desc": "Uma série de 12, 18 ou 24 palavras para restaurar sua carteira.",
@@ -170,8 +193,30 @@
       "select_network": "Selecione a rede",
       "evm": "EVM",
       "set_access_code": "Definir código de acesso",
-      "back": "Voltar",
-      "close": "Fechar"
+      "new_access_code": "Novo código de acesso",
+      "create_strong_access_code": "Crie um código de acesso forte",
+      "confirm_access_code": "Confirmar código de acesso",
+      "retype_access_code": "Digite novamente seu código de acesso",
+      "access_key_auth": "Autenticação com Chave de Acesso",
+      "sync_access_code": "Sincronizar código de acesso",
+      "import_recovery_phrase": "Importar frase de recuperação",
+      "twelve_words": "12 palavras",
+      "clear": "Limpar",
+      "instability_detected": "Instabilidade detectada",
+      "private_key_unstable": "O sistema de importação via chave privada está instável no momento.",
+      "address_unstable": "O sistema de importação via endereço está instável no momento.",
+      "recommend_use": "Recomendamos usar:",
+      "recovery_phrase": "Frase de recuperação",
+      "onekey_keytag": "OneKey KeyTag",
+      "please_wait": "Por favor, aguarde",
+      "connect": "Conectar",
+      "usb": "USB",
+      "qr_code": "Código QR",
+      "mobile": "Celular",
+      "connect_device_usb": "Conecte o dispositivo via USB",
+      "connect_device_usb_desc": "Clique no botão abaixo e selecione seu dispositivo na janela pop-up para conectar.",
+      "no_onekey": "Ainda não tem OneKey?",
+      "buy_one": "Compre um"
     },
     "maintenance": {
       "title": "Criação de Carteira em Manutenção",

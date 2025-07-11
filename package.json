@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "electron:dev": "vite build && electron .",
-    "electron:build": "vite build && electron-builder"
+    "electron:build": "vite build && electron-builder",
+    "electron:build:mac": "vite build && electron-builder --mac"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.2.8",
@@ -42,6 +43,14 @@
       "icon": "public/logo_green_vector.ico",
       "target": "nsis"
     },
+    "mac": {
+      "icon": "public/logo_green_vector.icns",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.finance"
+    },
     "nsis": {
       "oneClick": false,
       "perMachine": false,
@@ -66,6 +75,7 @@
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.11",
     "globals": "^15.9.0",
+    "png-to-icns": "^1.0.0",
     "postcss": "^8.4.35",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.5.3",

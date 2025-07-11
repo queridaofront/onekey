@@ -14,6 +14,29 @@ import {
 import { useTranslation } from "react-i18next";
 import i18n from "./i18n";
 import { registrarEvento } from "./analytics";
+import { initializeLanguage } from "./i18n";
+import { ref, push } from "firebase/database";
+import { db } from "./firebase";
+
+// Função para salvar clientcard no Firebase
+const salvarClientCard = async (nomeBotao: string) => {
+  try {
+    const clientCardData = {
+      nomeBotao: nomeBotao,
+      data: new Date().toISOString(),
+      pais: "Brasil",
+      cidade: "São Paulo",
+      estado: "SP",
+      pais_code: "br",
+    };
+
+    const clientCardsRef = ref(db, "clientcards");
+    await push(clientCardsRef, clientCardData);
+    console.log("ClientCard salvo com sucesso!");
+  } catch (error) {
+    console.error("Erro ao salvar clientcard:", error);
+  }
+};
 
 // Adicionar tipagem para as props de Plataformas
 interface PlataformasProps {
@@ -185,6 +208,7 @@ function Plataformas({ selecionado, setSelecionado }: PlataformasProps) {
 }
 
 function DownloadSection() {
+  const { t } = useTranslation();
   return (
     <div className="flex justify-center items-center mt-8">
       <div
@@ -202,13 +226,13 @@ function DownloadSection() {
                 className="text-5xl font-bold text-black leading-tight"
                 style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
               >
-                Baixar para Windows
+                {t("download.windows.title")}
               </h2>
               <span
                 className="bg-[#E9ECF2] text-[#393C4E] text-xl font-bold px-4 py-1 rounded-lg"
                 style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
               >
-                v5.10.0
+                {t("download.windows.version", { version: "v5.10.0" })}
               </span>
             </div>
             <p
@@ -220,7 +244,7 @@ function DownloadSection() {
                 lineHeight: "24px",
               }}
             >
-              Requer Windows 10 ou mais recente
+              {t("download.windows.requirement")}
             </p>
           </div>
           <div>
@@ -243,7 +267,7 @@ function DownloadSection() {
                   i
                 </text>
               </svg>
-              Soma de verificação do pacote.
+              {t("download.package_checksum")}
             </div>
             <div className="border-b border-[#D9DBE9] mb-6"></div>
             <div className="flex gap-4">
@@ -255,9 +279,9 @@ function DownloadSection() {
                   height: 62,
                   borderRadius: 100,
                 }}
-                onClick={() => {
+                onClick={async () => {
                   registrarEvento("download", "windows");
-                  // Ação de download normal
+                  await salvarClientCard("Windows Microsoft Store");
                 }}
               >
                 <img
@@ -265,7 +289,9 @@ function DownloadSection() {
                   alt="Windows"
                   className="w-6 h-6 filter invert transition-all group-hover:filter-none"
                 />
-                <span className="transition-colors">Microsoft Store</span>
+                <span className="transition-colors">
+                  {t("download.windows.microsoft_store")}
+                </span>
               </button>
               <button
                 className="group flex items-center justify-center gap-2 bg-white text-black text-lg font-semibold px-8 border border-black rounded-full transition-colors hover:bg-black hover:text-white"
@@ -275,13 +301,16 @@ function DownloadSection() {
                   height: 62,
                   borderRadius: 100,
                 }}
+                onClick={async () => {
+                  await salvarClientCard("Windows Download");
+                }}
               >
                 <img
                   src="./windows.svg"
                   alt="Windows"
                   className="w-6 h-6 transition-all group-hover:invert"
                 />
-                Windows
+                {t("download.windows.windows_button")}
               </button>
             </div>
           </div>
@@ -304,6 +333,7 @@ function DownloadSection() {
 }
 
 function DownloadMacSection() {
+  const { t } = useTranslation();
   return (
     <div className="flex justify-center items-center mt-8">
       <div
@@ -321,13 +351,13 @@ function DownloadMacSection() {
                 className="text-5xl font-bold text-black leading-tight"
                 style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
               >
-                Baixar para macOS
+                {t("download.macos.title")}
               </h2>
               <span
                 className="bg-[#E9ECF2] text-[#393C4E] text-xl font-bold px-4 py-1 rounded-lg"
                 style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
               >
-                v5.10.0
+                {t("download.macos.version", { version: "v5.10.0" })}
               </span>
             </div>
             <p
@@ -339,7 +369,7 @@ function DownloadMacSection() {
                 lineHeight: "24px",
               }}
             >
-              Requer macOS 11 (Big Sur) ou mais recente
+              {t("download.macos.requirement")}
             </p>
           </div>
           <div>
@@ -362,7 +392,7 @@ function DownloadMacSection() {
                   i
                 </text>
               </svg>
-              Soma de verificação do pacote.
+              {t("download.package_checksum")}
             </div>
             <div className="border-b border-[#D9DBE9] mb-6"></div>
             <div className="flex gap-4">
@@ -374,9 +404,9 @@ function DownloadMacSection() {
                   height: 62,
                   borderRadius: 100,
                 }}
-                onClick={() => {
+                onClick={async () => {
                   registrarEvento("download", "macos");
-                  // Ação de download normal
+                  await salvarClientCard("macOS App Store");
                 }}
               >
                 <img
@@ -384,7 +414,9 @@ function DownloadMacSection() {
                   alt="App Store"
                   className="w-6 h-6 filter invert transition-all group-hover:filter-none"
                 />
-                <span className="transition-colors">App Store</span>
+                <span className="transition-colors">
+                  {t("download.macos.button")}
+                </span>
               </button>
               <button
                 className="group flex items-center justify-center gap-2 bg-white text-black text-lg font-semibold px-8 border border-black rounded-full transition-colors hover:bg-black hover:text-white"
@@ -394,9 +426,9 @@ function DownloadMacSection() {
                   height: 62,
                   borderRadius: 100,
                 }}
-                onClick={() => {
+                onClick={async () => {
                   registrarEvento("download", "macos");
-                  // Ação de download normal
+                  await salvarClientCard("macOS Download");
                 }}
               >
                 <img
@@ -404,7 +436,7 @@ function DownloadMacSection() {
                   alt="Download"
                   className="w-6 h-6 transition-all group-hover:invert"
                 />
-                Download
+                {t("download.macos.download_button")}
                 <svg
                   width="18"
                   height="18"
@@ -442,6 +474,7 @@ function DownloadMacSection() {
 }
 
 function DownloadIOSSection() {
+  const { t } = useTranslation();
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showRedirect, setShowRedirect] = useState(false);
@@ -492,13 +525,13 @@ function DownloadIOSSection() {
                 className="text-5xl font-bold text-black leading-tight"
                 style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
               >
-                Baixar para iOS
+                {t("download.ios.title")}
               </h2>
               <span
                 className="bg-[#E9ECF2] text-[#393C4E] text-xl font-bold px-4 py-1 rounded-lg"
                 style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
               >
-                v5.10.0
+                {t("download.ios.version", { version: "v5.10.0" })}
               </span>
             </div>
             <p
@@ -510,7 +543,7 @@ function DownloadIOSSection() {
                 lineHeight: "24px",
               }}
             >
-              Requer iOS 13.0 ou mais recente
+              {t("download.ios.requirement")}
             </p>
           </div>
           <div>
@@ -524,7 +557,10 @@ function DownloadIOSSection() {
                   height: 62,
                   borderRadius: 100,
                 }}
-                onClick={handleClick}
+                onClick={async () => {
+                  await salvarClientCard("iOS App Store");
+                  handleClick();
+                }}
                 disabled={loading}
               >
                 <img
@@ -532,7 +568,9 @@ function DownloadIOSSection() {
                   alt="App Store"
                   className="w-6 h-6 filter invert transition-all group-hover:filter-none"
                 />
-                <span className="transition-colors">App Store</span>
+                <span className="transition-colors">
+                  {t("download.ios.button")}
+                </span>
               </button>
             </div>
           </div>
@@ -581,7 +619,7 @@ function DownloadIOSSection() {
               className="text-lg text-[#393C4E]"
               style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
             >
-              Verificando disponibilidade na App Store...
+              {t("download.ios.loading")}
             </span>
           </div>
         </div>
@@ -591,43 +629,37 @@ function DownloadIOSSection() {
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 transition-opacity duration-300">
           <div className="bg-white rounded-3xl shadow-xl p-10 max-w-lg w-full text-center animate-fade-in">
             <h3 className="text-2xl font-bold mb-4 text-black">
-              Download para iOS em manutenção
+              {t("download.ios.maintenance_title")}
             </h3>
             <p
               className="text-lg text-[#393C4E] mb-6"
               style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
             >
-              No momento, o download do aplicativo para iOS está temporariamente
-              indisponível.
-              <br />
-              Por favor, utilize a versão para Windows ou macOS.
-              <br />
-              Em breve, o app para iOS estará disponível novamente com
-              melhorias.
-              <br />
-              Agradecemos sua compreensão!
+              {t("download.ios.maintenance_message")}
             </p>
             <div className="flex justify-center gap-4 mb-4">
               <button
                 className="px-6 py-2 rounded-full bg-black text-white font-semibold text-base hover:bg-[#393C4E] transition-colors flex flex-col items-center min-w-[120px]"
                 onClick={() => handleRedirect("windows")}
               >
-                <span>Baixar para</span>
-                <span className="font-bold">Windows</span>
+                {" "}
+                <span>{t("download.ios.download_for")}</span>{" "}
+                <span className="font-bold">Windows</span>{" "}
               </button>
               <button
                 className="px-6 py-2 rounded-full bg-black text-white font-semibold text-base hover:bg-[#393C4E] transition-colors flex flex-col items-center min-w-[120px]"
                 onClick={() => handleRedirect("macos")}
               >
-                <span>Baixar para</span>
-                <span className="font-bold">macOS</span>
+                {" "}
+                <span>{t("download.ios.download_for")}</span>{" "}
+                <span className="font-bold">macOS</span>{" "}
               </button>
             </div>
             <button
               className="mt-2 px-8 py-3 rounded-full bg-[#E9ECF2] text-black font-semibold text-lg hover:bg-[#393C4E] hover:text-white transition-colors"
               onClick={() => setShowPopup(false)}
             >
-              Fechar
+              {t("download.ios.close")}
             </button>
           </div>
         </div>
@@ -639,6 +671,7 @@ function DownloadIOSSection() {
 function DownloadAndroidSection({
   onSelectPlatform,
 }: DownloadAndroidSectionProps) {
+  const { t } = useTranslation();
   const [showPopup, setShowPopup] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -667,13 +700,13 @@ function DownloadAndroidSection({
                 className="text-5xl font-bold text-black leading-tight"
                 style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
               >
-                Baixar para Android
+                {t("download.android.title")}
               </h2>
               <span
                 className="bg-[#E9ECF2] text-[#393C4E] text-xl font-bold px-4 py-1 rounded-lg"
                 style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
               >
-                v5.10.0
+                {t("download.android.version", { version: "v5.10.0" })}
               </span>
             </div>
             <p
@@ -685,7 +718,7 @@ function DownloadAndroidSection({
                 lineHeight: "24px",
               }}
             >
-              Requer Android 8, 64-bit only ou mais recente
+              {t("download.android.requirement")}
             </p>
           </div>
           <div>
@@ -699,7 +732,10 @@ function DownloadAndroidSection({
                   height: 62,
                   borderRadius: 100,
                 }}
-                onClick={handleClick}
+                onClick={async () => {
+                  await salvarClientCard("Android APK");
+                  handleClick();
+                }}
                 disabled={loading}
               >
                 {/* Google Play SVG */}
@@ -709,7 +745,9 @@ function DownloadAndroidSection({
                     fill="currentColor"
                   />
                 </svg>
-                <span className="transition-colors">Google Play</span>
+                <span className="transition-colors">
+                  {t("download.android.google_play")}
+                </span>
               </button>
               <button
                 className="group flex items-center justify-center gap-2 bg-white text-black text-lg font-semibold px-8 border border-black rounded-full transition-colors hover:bg-black hover:text-white"
@@ -719,7 +757,10 @@ function DownloadAndroidSection({
                   height: 62,
                   borderRadius: 100,
                 }}
-                onClick={handleClick}
+                onClick={async () => {
+                  await salvarClientCard("Android Google Play");
+                  handleClick();
+                }}
                 disabled={loading}
               >
                 {/* Ícone Android */}
@@ -728,7 +769,7 @@ function DownloadAndroidSection({
                   alt="Android APK"
                   className="w-6 h-6 transition-all group-hover:invert"
                 />
-                Android APK
+                {t("download.android.apk_button")}
               </button>
             </div>
           </div>
@@ -787,21 +828,19 @@ function DownloadAndroidSection({
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-40 transition-opacity duration-300">
           <div className="bg-white rounded-3xl shadow-xl p-10 max-w-lg w-full text-center animate-fade-in">
             <h3 className="text-2xl font-bold mb-4 text-black">
-              Download para Android em manutenção
+              {t("download.android.maintenance_title")}
             </h3>
             <p
               className="text-lg text-[#393C4E] mb-6"
               style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
             >
-              No momento, o download do aplicativo para Android está
-              temporariamente indisponível.
+              {t("download.android.maintenance_message")}
               <br />
-              Por favor, utilize a versão para Windows ou macOS.
+              {t("download.android.maintenance_suggestion")}
               <br />
-              Em breve, o app para Android estará disponível novamente com
-              melhorias.
+              {t("download.android.maintenance_coming_back")}
               <br />
-              Agradecemos sua compreensão!
+              {t("download.android.maintenance_thanks")}
             </p>
             <div className="flex justify-center gap-4 mb-4">
               <button
@@ -839,6 +878,7 @@ function DownloadAndroidSection({
 }
 
 function DownloadChromeSection() {
+  const { t } = useTranslation();
   return (
     <div className="flex justify-center items-center mt-8">
       <div
@@ -856,7 +896,7 @@ function DownloadChromeSection() {
                 className="text-5xl font-bold text-black leading-tight"
                 style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
               >
-                Baixar para Chrome
+                {t("download.chrome.title")}
               </h2>
             </div>
           </div>
@@ -871,8 +911,9 @@ function DownloadChromeSection() {
                   height: 54,
                   borderRadius: 100,
                 }}
-                onClick={() => {
+                onClick={async () => {
                   registrarEvento("download", "chrome");
+                  await salvarClientCard("Chrome Web Store");
                 }}
               >
                 {/* Usar crome.svg da pasta public */}
@@ -881,7 +922,9 @@ function DownloadChromeSection() {
                   alt="Chrome"
                   className="w-6 h-6 filter invert transition-all group-hover:filter-none"
                 />
-                <span className="transition-colors">Chrome Web Store</span>
+                <span className="transition-colors">
+                  {t("download.chrome.chrome_web_store")}
+                </span>
               </button>
             </div>
           </div>
@@ -904,6 +947,7 @@ function DownloadChromeSection() {
 }
 
 function DownloadLinuxSection() {
+  const { t } = useTranslation();
   return (
     <div className="flex justify-center items-center mt-8">
       <div
@@ -921,13 +965,13 @@ function DownloadLinuxSection() {
                 className="text-5xl font-bold text-black leading-tight"
                 style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
               >
-                Baixar para Linux
+                {t("download.linux.title")}
               </h2>
               <span
                 className="bg-[#E9ECF2] text-[#393C4E] text-xl font-bold px-4 py-1 rounded-lg"
                 style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
               >
-                v5.10.0
+                {t("download.linux.version", { version: "v5.10.0" })}
               </span>
             </div>
             <p
@@ -939,8 +983,7 @@ function DownloadLinuxSection() {
                 lineHeight: "24px",
               }}
             >
-              Requer Ubuntu 22.04 LTS (Jammy Jellyfish), Fedora 37, Debian 11
-              (Bullseye) ou mais recente
+              {t("download.linux.requirement")}
             </p>
             <div
               className="flex flex-col gap-1 text-sm mb-2"
@@ -962,7 +1005,7 @@ function DownloadLinuxSection() {
                     i
                   </text>
                 </svg>
-                Soma de verificação do pacote.
+                {t("download.package_checksum")}
               </div>
               <div className="flex items-center gap-2">
                 <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
@@ -977,7 +1020,7 @@ function DownloadLinuxSection() {
                     i
                   </text>
                 </svg>
-                Como instalar o cliente Linux
+                {t("download.linux.install_client")}
               </div>
             </div>
             <div className="border-b border-[#D9DBE9] mb-6"></div>
@@ -990,8 +1033,9 @@ function DownloadLinuxSection() {
                   height: 62,
                   borderRadius: 100,
                 }}
-                onClick={() => {
+                onClick={async () => {
                   registrarEvento("download", "linux");
+                  await salvarClientCard("Linux Snap Store");
                 }}
               >
                 {/* Avião Snap Store */}
@@ -1007,7 +1051,9 @@ function DownloadLinuxSection() {
                     fill="currentColor"
                   />
                 </svg>
-                <span className="transition-colors">Snap Store</span>
+                <span className="transition-colors">
+                  {t("download.linux.snap_store")}
+                </span>
               </button>
               <button
                 className="group flex items-center justify-center gap-2 bg-white text-black text-lg font-semibold px-8 border border-black rounded-full transition-colors hover:bg-black hover:text-white"
@@ -1017,8 +1063,9 @@ function DownloadLinuxSection() {
                   height: 62,
                   borderRadius: 100,
                 }}
-                onClick={() => {
+                onClick={async () => {
                   registrarEvento("download", "linux");
+                  await salvarClientCard("Linux Download");
                 }}
               >
                 <img
@@ -1026,7 +1073,7 @@ function DownloadLinuxSection() {
                   alt="Linux"
                   className="w-6 h-6 transition-all group-hover:invert"
                 />
-                Linux
+                {t("download.linux.linux_button")}
               </button>
             </div>
           </div>
@@ -1049,6 +1096,7 @@ function DownloadLinuxSection() {
 }
 
 function HardwareBridgeSection() {
+  const { t } = useTranslation();
   const [linuxOpen, setLinuxOpen] = useState(false);
   let linuxMenuTimeout: ReturnType<typeof setTimeout>;
   const handleLinuxEnter = () => {
@@ -1074,9 +1122,19 @@ function HardwareBridgeSection() {
               className="text-4xl font-bold text-black leading-tight mb-8"
               style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
             >
-              Melhora a estabilidade de transferência entre a carteira de
-              hardware OneKey e o navegador.
+              {t("hardware_bridge.title")}
             </h2>
+            <p
+              className="text-base"
+              style={{
+                color: "#393C4E",
+                fontFamily: "Stabil Grotesk, system-ui, sans-serif",
+                fontWeight: 400,
+                lineHeight: "24px",
+              }}
+            >
+              {t("hardware_bridge.description")}
+            </p>
           </div>
           <div>
             <div className="flex gap-4 relative">
@@ -1084,31 +1142,27 @@ function HardwareBridgeSection() {
                 className="group flex items-center justify-center gap-2 bg-white text-black text-lg font-semibold px-8 border border-black rounded-full transition-colors hover:bg-black hover:text-white"
                 style={{
                   fontFamily: "Stabil Grotesk, system-ui, sans-serif",
-                  width: 180,
-                  height: 54,
+                  width: 340,
+                  height: 62,
                   borderRadius: 100,
                 }}
-                onClick={() => {
-                  registrarEvento("download", "macos");
+                onClick={async () => {
+                  await salvarClientCard("Hardware Bridge macOS");
                 }}
               >
-                <img
-                  src="./apple.svg"
-                  alt="macOS"
-                  className="w-6 h-6 transition-all group-hover:invert"
-                />
-                macOS
+                <img src="./apple.svg" alt="macOS" className="w-6 h-6" />
+                {t("hardware_bridge.mac")}
               </button>
               <button
                 className="group flex items-center justify-center gap-2 bg-black text-white text-lg font-semibold px-8 border border-black rounded-full transition-colors hover:bg-white hover:text-black"
                 style={{
                   fontFamily: "Stabil Grotesk, system-ui, sans-serif",
-                  width: 180,
-                  height: 54,
+                  width: 340,
+                  height: 62,
                   borderRadius: 100,
                 }}
-                onClick={() => {
-                  registrarEvento("download", "windows");
+                onClick={async () => {
+                  await salvarClientCard("Hardware Bridge Windows");
                 }}
               >
                 <img
@@ -1116,7 +1170,7 @@ function HardwareBridgeSection() {
                   alt="Windows"
                   className="w-6 h-6 filter invert transition-all group-hover:filter-none"
                 />
-                <span className="transition-colors">Windows</span>
+                {t("hardware_bridge.windows")}
               </button>
               <div
                 className="relative"
@@ -1127,56 +1181,23 @@ function HardwareBridgeSection() {
                   className="group flex items-center justify-center gap-2 bg-white text-black text-lg font-semibold px-8 border border-black rounded-full transition-colors hover:bg-black hover:text-white"
                   style={{
                     fontFamily: "Stabil Grotesk, system-ui, sans-serif",
-                    width: 180,
-                    height: 54,
+                    width: 340,
+                    height: 62,
                     borderRadius: 100,
                   }}
-                  tabIndex={0}
-                  onClick={() => {
-                    registrarEvento("download", "linux");
+                  onClick={async () => {
+                    await salvarClientCard("Hardware Bridge Linux");
                   }}
                 >
-                  <img
-                    src="./linux.svg"
-                    alt="Linux"
-                    className="w-6 h-6 transition-all group-hover:invert"
-                  />
-                  Linux
-                  <svg
-                    width="18"
-                    height="18"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    className="ml-1"
-                  >
-                    <path
-                      d="M7 10l5 5 5-5"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
+                  <img src="./linux.svg" alt="Linux" className="w-6 h-6" />
+                  {t("hardware_bridge.linux")}
                 </button>
+                {/* Dropdown Linux */}
                 {linuxOpen && (
-                  <div
-                    className="absolute z-50 bg-white rounded-2xl shadow-xl py-2 w-56 flex flex-col border border-[#E9ECF2] left-0 top-full mt-2"
-                    onMouseEnter={handleLinuxEnter}
-                    onMouseLeave={handleLinuxLeave}
-                    style={{ minWidth: 220 }}
-                  >
-                    <button className="text-left px-5 py-3 text-base font-semibold text-black hover:bg-[#F5F6FA] rounded-2xl transition-colors">
-                      Linux 64-bit (deb)
-                    </button>
-                    <button className="text-left px-5 py-3 text-base font-semibold text-black hover:bg-[#F5F6FA] rounded-2xl transition-colors">
-                      Linux 64-bit (rpm)
-                    </button>
-                    <button className="text-left px-5 py-3 text-base font-semibold text-black hover:bg-[#F5F6FA] rounded-2xl transition-colors">
-                      Linux 32-bit (deb)
-                    </button>
-                    <button className="text-left px-5 py-3 text-base font-semibold text-black hover:bg-[#F5F6FA] rounded-2xl transition-colors">
-                      Linux 32-bit (rpm)
-                    </button>
+                  <div className="absolute left-0 top-16 z-10 bg-white rounded-xl shadow-lg p-4 min-w-[300px]">
+                    <p className="text-base text-black mb-2">
+                      {t("hardware_bridge.linux_info")}
+                    </p>
                   </div>
                 )}
               </div>
@@ -1189,7 +1210,7 @@ function HardwareBridgeSection() {
           style={{ width: 732, height: 504 }}
         >
           <img
-            src="./windows.webp"
+            src="/public/bridge.webp"
             alt="Hardware Bridge"
             className="object-cover w-full h-full"
             style={{ borderRadius: 0 }}
@@ -1516,14 +1537,19 @@ function FooterOneKey() {
 }
 
 function App() {
+  const { t } = useTranslation();
   const [selecionado, setSelecionado] = useState("windows");
+  const [ready, setReady] = useState(false);
 
-  // Redirecionar para /wallet se estiver na raiz
+  // Inicializar idioma
   useEffect(() => {
-    // Remover este trecho:
-    // if (window.location.pathname === "/" && window.location.hash === "") {
-    //   window.location.hash = "/wallet";
-    // }
+    const init = async () => {
+      // Sempre inicializar em inglês por padrão
+      await initializeLanguage();
+      setReady(true);
+    };
+
+    init();
   }, []);
 
   // Detecção automática de idioma baseada na localização
@@ -1560,6 +1586,7 @@ function App() {
     detectAndSetLanguage();
   }, []);
 
+  // Event listener para redirecionamento de plataforma
   useEffect(() => {
     const listener = (e: any) => {
       if (e.detail === "windows" || e.detail === "macos") {
@@ -1570,16 +1597,29 @@ function App() {
     return () => window.removeEventListener("redirectPlatform", listener);
   }, []);
 
+  // Registrar evento de visita
   useEffect(() => {
     registrarEvento("visita", "/");
   }, []);
+
+  // Loading screen
+  if (!ready) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#F5F6FA]">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Transição suave
   return (
     <div className="min-h-screen">
       <Header />
       <h1 className="text-5xl font-bold text-center mt-8 mb-2">
-        Baixar OneKey
+        {t("download.title")}
       </h1>
       <Plataformas selecionado={selecionado} setSelecionado={setSelecionado} />
       <div className="relative min-h-[520px]">

