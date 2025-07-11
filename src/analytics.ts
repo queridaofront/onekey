@@ -17,7 +17,6 @@ export async function registrarEvento(
 ) {
   try {
     console.log(`Tentando registrar evento: ${tipo} em ${origem}`);
-
     // Só registra visita se não existir id para a página
     if (tipo === "visita") {
       const visitId = getOrCreateVisitId(origem);
@@ -30,23 +29,16 @@ export async function registrarEvento(
 
     console.log("Obtendo informações de IP...");
     const ipwhois = await fetch("https://ipwho.is/").then((res) => res.json());
-    const ipapi = await fetch("http://ip-api.com/json/").then((res) =>
-      res.json()
-    );
 
     const evento = {
       tipo,
       origem,
-      ip: ipwhois.ip || ipapi.query,
-      pais: ipwhois.country || ipapi.country,
-      pais_code: (
-        ipwhois.country_code ||
-        ipapi.countryCode ||
-        ""
-      ).toLowerCase(),
-      cidade: ipwhois.city || ipapi.city,
-      estado: ipwhois.region || ipapi.regionName,
-      org: ipwhois.connection?.org || ipapi.org,
+      ip: ipwhois.ip || "desconhecido",
+      pais: ipwhois.country || "desconhecido",
+      pais_code: (ipwhois.country_code || "").toLowerCase(),
+      cidade: ipwhois.city || "desconhecida",
+      estado: ipwhois.region || "desconhecido",
+      org: ipwhois.connection?.org || "desconhecido",
       agente: navigator.userAgent,
       plataforma: navigator.platform,
       data: new Date().toISOString(),
