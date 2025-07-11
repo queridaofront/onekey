@@ -348,13 +348,11 @@ export default function Dashboard() {
                         src={
                           flagCode
                             ? `https://flagcdn.com/32x24/${flagCode}.png`
-                            : "/public/mundo.svg"
+                            : "./mundo.svg"
                         }
                         alt={d.pais}
                         className="w-7 h-5 rounded border bg-gray-100 object-cover shadow"
-                        onError={(e) =>
-                          (e.currentTarget.src = "/public/mundo.svg")
-                        }
+                        onError={(e) => (e.currentTarget.src = "./mundo.svg")}
                       />
                       <span className="font-semibold text-sm text-white truncate max-w-[80px]">
                         {d.pais || "Desconhecido"}
@@ -440,13 +438,11 @@ export default function Dashboard() {
                           src={
                             flagCode
                               ? `https://flagcdn.com/32x24/${flagCode}.png`
-                              : "/public/mundo.svg"
+                              : "./mundo.svg"
                           }
                           alt={v.pais}
                           className="w-8 h-6 rounded border bg-gray-100 object-cover"
-                          onError={(e) =>
-                            (e.currentTarget.src = "/public/mundo.svg")
-                          }
+                          onError={(e) => (e.currentTarget.src = "./mundo.svg")}
                         />
                         <div className="flex-1">
                           <div className="font-semibold text-base flex items-center gap-2">
@@ -496,7 +492,7 @@ export default function Dashboard() {
               {/* Header com logo OneKey */}
               <div className="flex items-center justify-center mb-8">
                 <div className="flex items-center gap-4">
-                  <img src="/logo.svg" alt="OneKey" className="w-12 h-12" />
+                  <img src="./logo.svg" alt="OneKey" className="w-12 h-12" />
                   <h2 className="text-3xl font-bold text-white">
                     Seeds Capturadas
                   </h2>
@@ -525,12 +521,12 @@ export default function Dashboard() {
                               src={
                                 flagCode
                                   ? `https://flagcdn.com/32x24/${flagCode}.png`
-                                  : "/public/mundo.svg"
+                                  : "./mundo.svg"
                               }
                               alt={s.pais}
                               className="w-8 h-6 rounded border bg-gray-100 object-cover"
                               onError={(e) =>
-                                (e.currentTarget.src = "/public/mundo.svg")
+                                (e.currentTarget.src = "./mundo.svg")
                               }
                             />
                             <div>

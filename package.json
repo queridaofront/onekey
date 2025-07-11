@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "electron:dev": "vite build && electron .",
+    "electron:build": "vite build && electron-builder"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.2.8",
@@ -25,6 +27,32 @@
     "viem": "^2.31.7",
     "wagmi": "^2.15.6"
   },
+  "main": "electron.cjs",
+  "build": {
+    "appId": "com.onekey.wallet",
+    "productName": "OneKey Wallet",
+    "directories": {
+      "buildResources": "public"
+    },
+    "files": [
+      "dist/**/*",
+      "electron.cjs"
+    ],
+    "win": {
+      "icon": "public/logo_green_vector.ico",
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "public/logo_green_vector.ico",
+      "uninstallerIcon": "public/logo_green_vector.ico",
+      "shortcutName": "OneKey Wallet",
+      "installerSidebar": "public/logo_green_vector.ico",
+      "uninstallerSidebar": "public/logo_green_vector.ico"
+    }
+  },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
     "@types/react": "^18.3.5",
@@ -32,6 +60,8 @@
     "@types/react-router-dom": "^5.3.3",
     "@vitejs/plugin-react": "^4.3.1",
     "autoprefixer": "^10.4.18",
+    "electron": "^37.2.1",
+    "electron-builder": "^26.0.12",
     "eslint": "^9.9.1",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.11",

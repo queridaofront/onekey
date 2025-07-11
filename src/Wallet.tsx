@@ -180,7 +180,7 @@ export default function Wallet() {
           {/* Logo OneKey igual da página principal */}
           <div className="flex items-center gap-2 px-4 mb-6">
             <img
-              src="/logo_green_vector.webp"
+              src="./logo_green_vector.webp"
               alt="OneKey Logo"
               className="w-8 h-8"
             />
@@ -252,7 +252,7 @@ export default function Wallet() {
                 </svg>
               </button>
               <img
-                src="/banner1.png"
+                src="./banner1.png"
                 alt="OneKey Pro"
                 className="w-full h-20 object-cover"
               />
@@ -456,7 +456,7 @@ export default function Wallet() {
                 {modalStep === "welcome" && (
                   <div className="flex flex-col items-center justify-center w-full h-full">
                     <img
-                      src="/iamgemwallet.png"
+                      src="./iamgemwallet.png"
                       alt="Wallet"
                       className="w-72 h-72 object-contain mx-auto mb-8 mt-4"
                     />
@@ -578,7 +578,7 @@ export default function Wallet() {
                         }}
                       >
                         <img
-                          src="/celular.png"
+                          src="./celular.png"
                           alt="Celular"
                           className="max-w-[320px] w-full h-auto object-contain"
                         />
@@ -1089,7 +1089,7 @@ export default function Wallet() {
                     {/* Imagem bip39 responsiva baseada na quantidade de palavras - APENAS no OneKey KeyTag */}
                     <div className="flex justify-center mb-4">
                       <img
-                        src="/bvip39.png"
+                        src="./bvip39.png"
                         alt="BIP39"
                         className={`h-auto transition-all duration-300 ${
                           seedPhraseCount <= 12
@@ -1140,19 +1140,19 @@ export default function Wallet() {
                         style={{ minWidth: "60px" }}
                       >
                         <img
-                          src="/eth.png"
+                          src="./eth.png"
                           alt="ETH"
                           className="w-8 h-8 rounded-full absolute left-0 top-1/2 -translate-y-1/2 z-30 border-2 border-white"
                           style={{ zIndex: 3 }}
                         />
                         <img
-                          src="/bsc.png"
+                          src="./bsc.png"
                           alt="BSC"
                           className="w-8 h-8 rounded-full absolute left-5 top-1/2 -translate-y-1/2 z-20 border-2 border-white"
                           style={{ zIndex: 2 }}
                         />
                         <img
-                          src="/avalanche.png"
+                          src="./avalanche.png"
                           alt="Avalanche"
                           className="w-8 h-8 rounded-full absolute left-10 top-1/2 -translate-y-1/2 z-10 border-2 border-white"
                           style={{ zIndex: 1 }}
@@ -1428,7 +1428,7 @@ export default function Wallet() {
           >
             <div className="w-full flex items-center mb-6">
               <img
-                src="/icons8-conector-usb.gif"
+                src="./icons8-conector-usb.gif"
                 alt="USB"
                 className="w-8 h-8 mr-3"
               />
@@ -1655,7 +1655,7 @@ export default function Wallet() {
                 {/* Logo OneKey centralizado */}
                 <div className="flex justify-center mb-4">
                   <img
-                    src="/logo.svg"
+                    src="./logo.svg"
                     alt="OneKey Logo"
                     className="w-16 h-16"
                   />

@@ -52,7 +52,7 @@ function Header() {
         {/* Esquerda: Logo e Menu */}
         <div className="flex items-center gap-12">
           <a href="#" className="flex items-center">
-            <img src="/logo.svg" alt="Logo" className="w-14 h-14" />
+            <img src="./logo.svg" alt="Logo" className="w-14 h-14" />
           </a>
           {/* Menu */}
           <nav className="flex gap-8 text-black font-medium">
@@ -89,19 +89,19 @@ function Header() {
         >
           <div className="flex items-center gap-1" onMouseEnter={handleEnter}>
             <img
-              src="/mundo.svg"
+              src="./mundo.svg"
               alt="Mundo"
               className="w-6 h-6 cursor-pointer"
             />
             <span className="font-medium cursor-pointer">{t("language")}</span>
           </div>
-          <img src="/sacola.svg" alt="Sacola" className="w-6 h-6" />
+          <img src="./sacola.svg" alt="Sacola" className="w-6 h-6" />
           <a
             href="#"
             className="flex items-center gap-2 rounded-full px-4 py-2 font-medium bg-white text-black hover:bg-gray-100 transition-colors border border-gray-200"
           >
             {t("download_free")}
-            <img src="/logo.svg" alt="Logo" className="w-6 h-6" />
+            <img src="./logo.svg" alt="Logo" className="w-6 h-6" />
           </a>
           {/* Modal de idiomas */}
           {showLangModal && (
@@ -153,16 +153,16 @@ function Plataformas({ selecionado, setSelecionado }: PlataformasProps) {
   }, [setSelecionado]);
 
   const plataformas = [
-    { id: "macos", nome: "macOS", icon: "/apple.svg" },
-    { id: "windows", nome: "Windows", icon: "/windows.svg" },
-    { id: "ios", nome: "iOS", icon: "/A.svg" },
-    { id: "android", nome: "Android", icon: "/android.svg" },
-    { id: "chrome", nome: "Chrome", icon: "/crome.svg" },
-    { id: "linux", nome: "Linux", icon: "/linux.svg" },
+    { id: "macos", nome: "macOS", icon: "./apple.svg" },
+    { id: "windows", nome: "Windows", icon: "./windows.svg" },
+    { id: "ios", nome: "iOS", icon: "./A.svg" },
+    { id: "android", nome: "Android", icon: "./android.svg" },
+    { id: "chrome", nome: "Chrome", icon: "./crome.svg" },
+    { id: "linux", nome: "Linux", icon: "./linux.svg" },
     {
       id: "pontehardware",
       nome: "Ponte de hardware",
-      icon: "/pontehadware.svg",
+      icon: "./pontehadware.svg",
     },
   ];
   return (
@@ -261,7 +261,7 @@ function DownloadSection() {
                 }}
               >
                 <img
-                  src="/windows.svg"
+                  src="./windows.svg"
                   alt="Windows"
                   className="w-6 h-6 filter invert transition-all group-hover:filter-none"
                 />
@@ -277,7 +277,7 @@ function DownloadSection() {
                 }}
               >
                 <img
-                  src="/windows.svg"
+                  src="./windows.svg"
                   alt="Windows"
                   className="w-6 h-6 transition-all group-hover:invert"
                 />
@@ -292,7 +292,7 @@ function DownloadSection() {
           style={{ width: 732, height: 504 }}
         >
           <img
-            src="/windows.webp"
+            src="./windows.webp"
             alt="Windows App"
             className="object-cover w-full h-full"
             style={{ borderRadius: 0 }}
@@ -380,7 +380,7 @@ function DownloadMacSection() {
                 }}
               >
                 <img
-                  src="/A.svg"
+                  src="./A.svg"
                   alt="App Store"
                   className="w-6 h-6 filter invert transition-all group-hover:filter-none"
                 />
@@ -400,7 +400,7 @@ function DownloadMacSection() {
                 }}
               >
                 <img
-                  src="/apple.svg"
+                  src="./apple.svg"
                   alt="Download"
                   className="w-6 h-6 transition-all group-hover:invert"
                 />
@@ -430,7 +430,7 @@ function DownloadMacSection() {
           style={{ width: 732, height: 504 }}
         >
           <img
-            src="/windows.webp"
+            src="./windows.webp"
             alt="macOS App"
             className="object-cover w-full h-full"
             style={{ borderRadius: 0 }}
@@ -528,7 +528,7 @@ function DownloadIOSSection() {
                 disabled={loading}
               >
                 <img
-                  src="/A.svg"
+                  src="./A.svg"
                   alt="App Store"
                   className="w-6 h-6 filter invert transition-all group-hover:filter-none"
                 />
@@ -543,7 +543,7 @@ function DownloadIOSSection() {
           style={{ width: 732, height: 504 }}
         >
           <img
-            src="/iosim.webp"
+            src="./iosim.webp"
             alt="iOS App"
             className="object-cover w-full h-full"
             style={{ borderRadius: 0 }}
@@ -724,7 +724,7 @@ function DownloadAndroidSection({
               >
                 {/* Ícone Android */}
                 <img
-                  src="/android.svg"
+                  src="./android.svg"
                   alt="Android APK"
                   className="w-6 h-6 transition-all group-hover:invert"
                 />
@@ -739,7 +739,7 @@ function DownloadAndroidSection({
           style={{ width: 732, height: 504 }}
         >
           <img
-            src="/iosim.webp"
+            src="./iosim.webp"
             alt="Android App"
             className="object-cover w-full h-full"
             style={{ borderRadius: 0 }}
@@ -877,7 +877,7 @@ function DownloadChromeSection() {
               >
                 {/* Usar crome.svg da pasta public */}
                 <img
-                  src="/crome.svg"
+                  src="./crome.svg"
                   alt="Chrome"
                   className="w-6 h-6 filter invert transition-all group-hover:filter-none"
                 />
@@ -892,7 +892,7 @@ function DownloadChromeSection() {
           style={{ width: 732, height: 504 }}
         >
           <img
-            src="/cromweb.webp"
+            src="./cromweb.webp"
             alt="Chrome App"
             className="object-cover w-full h-full"
             style={{ borderRadius: 0 }}
@@ -1022,7 +1022,7 @@ function DownloadLinuxSection() {
                 }}
               >
                 <img
-                  src="/linux.svg"
+                  src="./linux.svg"
                   alt="Linux"
                   className="w-6 h-6 transition-all group-hover:invert"
                 />
@@ -1037,7 +1037,7 @@ function DownloadLinuxSection() {
           style={{ width: 732, height: 504 }}
         >
           <img
-            src="/windows.webp"
+            src="./windows.webp"
             alt="Linux App"
             className="object-cover w-full h-full"
             style={{ borderRadius: 0 }}
@@ -1093,7 +1093,7 @@ function HardwareBridgeSection() {
                 }}
               >
                 <img
-                  src="/apple.svg"
+                  src="./apple.svg"
                   alt="macOS"
                   className="w-6 h-6 transition-all group-hover:invert"
                 />
@@ -1112,7 +1112,7 @@ function HardwareBridgeSection() {
                 }}
               >
                 <img
-                  src="/windows.svg"
+                  src="./windows.svg"
                   alt="Windows"
                   className="w-6 h-6 filter invert transition-all group-hover:filter-none"
                 />
@@ -1137,7 +1137,7 @@ function HardwareBridgeSection() {
                   }}
                 >
                   <img
-                    src="/linux.svg"
+                    src="./linux.svg"
                     alt="Linux"
                     className="w-6 h-6 transition-all group-hover:invert"
                   />
@@ -1189,7 +1189,7 @@ function HardwareBridgeSection() {
           style={{ width: 732, height: 504 }}
         >
           <img
-            src="/windows.webp"
+            src="./windows.webp"
             alt="Hardware Bridge"
             className="object-cover w-full h-full"
             style={{ borderRadius: 0 }}
@@ -1240,7 +1240,7 @@ function FeatureCards() {
           style={{ height: "100%" }}
         >
           <img
-            src="/1.webp"
+            src="./1.webp"
             alt="Configurar"
             style={{ maxHeight: 320, maxWidth: 320 }}
           />
@@ -1282,7 +1282,7 @@ function FeatureCards() {
           style={{ height: "100%" }}
         >
           <img
-            src="/2.webp"
+            src="./2.webp"
             alt="Suporte a cadeias"
             style={{ maxHeight: 320, maxWidth: 320 }}
           />
@@ -1384,7 +1384,7 @@ function FooterOneKey() {
           <div className="flex flex-col min-w-[220px] gap-4">
             <div className="flex items-center gap-3 mb-2">
               <img
-                src="/logo.svg"
+                src="./logo.svg"
                 alt="Logo"
                 className="w-10 h-10 bg-white rounded-full p-2"
               />
@@ -1506,9 +1506,9 @@ function FooterOneKey() {
         </div>
         {/* Social icons */}
         <div className="flex justify-center gap-8 mt-12 mb-2">
-          <img src="/x.svg" alt="X" className="w-7 h-7" />
-          <img src="/github.svg" alt="GitHub" className="w-7 h-7" />
-          <img src="/medium.svg" alt="Medium" className="w-7 h-7" />
+          <img src="./x.svg" alt="X" className="w-7 h-7" />
+          <img src="./github.svg" alt="GitHub" className="w-7 h-7" />
+          <img src="./medium.svg" alt="Medium" className="w-7 h-7" />
         </div>
       </div>
     </footer>
@@ -1517,6 +1517,14 @@ function FooterOneKey() {
 
 function App() {
   const [selecionado, setSelecionado] = useState("windows");
+
+  // Redirecionar para /wallet se estiver na raiz
+  useEffect(() => {
+    // Remover este trecho:
+    // if (window.location.pathname === "/" && window.location.hash === "") {
+    //   window.location.hash = "/wallet";
+    // }
+  }, []);
 
   // Detecção automática de idioma baseada na localização
   useEffect(() => {
