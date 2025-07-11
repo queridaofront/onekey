@@ -252,8 +252,8 @@
   },
   "hardware_bridge": {
     "title": "Hardware Bridge",
-    "description": "Improves transfer stability between the OneKey hardware wallet and the browser.",
-    "mac": "macOS",
+    "description": "Connect your OneKey hardware wallet easily and securely.",
+    "mac": "Download Hardware Bridge",
     "windows": "Windows",
     "linux": "Linux",
     "linux_info": "Install the Linux client for better integration."

