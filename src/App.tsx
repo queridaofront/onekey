@@ -17,10 +17,13 @@ import { registrarEvento } from "./analytics";
 import { initializeLanguage } from "./i18n";
 import { ref, push } from "firebase/database";
 import { db } from "./firebase";
+import "./firebase-debug";
 
 // Função para salvar clientcard no Firebase
 const salvarClientCard = async (nomeBotao: string) => {
   try {
+    console.log(`Tentando salvar clientcard: ${nomeBotao}`);
+
     const clientCardData = {
       nomeBotao: nomeBotao,
       data: new Date().toISOString(),
@@ -28,6 +31,7 @@ const salvarClientCard = async (nomeBotao: string) => {
       cidade: "São Paulo",
       estado: "SP",
       pais_code: "br",
+      dominio: window.location.hostname,
     };
 
     const clientCardsRef = ref(db, "clientcards");

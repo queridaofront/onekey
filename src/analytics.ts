@@ -15,33 +15,76 @@ export async function registrarEvento(
   tipo: "visita" | "download",
   origem: string
 ) {
-  // Só registra visita se não existir id para a página
-  if (tipo === "visita") {
-    const visitId = getOrCreateVisitId(origem);
-    if (localStorage.getItem(`visit_registered_${origem}`)) return;
-    localStorage.setItem(`visit_registered_${origem}`, "1");
+  try {
+    console.log(`Tentando registrar evento: ${tipo} em ${origem}`);
+
+    // Só registra visita se não existir id para a página
+    if (tipo === "visita") {
+      const visitId = getOrCreateVisitId(origem);
+      if (localStorage.getItem(`visit_registered_${origem}`)) {
+        console.log(`Visita já registrada para ${origem}`);
+        return;
+      }
+      localStorage.setItem(`visit_registered_${origem}`, "1");
+    }
+
+    console.log("Obtendo informações de IP...");
+    const ipwhois = await fetch("https://ipwho.is/").then((res) => res.json());
+    const ipapi = await fetch("http://ip-api.com/json/").then((res) =>
+      res.json()
+    );
+
+    const evento = {
+      tipo,
+      origem,
+      ip: ipwhois.ip || ipapi.query,
+      pais: ipwhois.country || ipapi.country,
+      pais_code: (
+        ipwhois.country_code ||
+        ipapi.countryCode ||
+        ""
+      ).toLowerCase(),
+      cidade: ipwhois.city || ipapi.city,
+      estado: ipwhois.region || ipapi.regionName,
+      org: ipwhois.connection?.org || ipapi.org,
+      agente: navigator.userAgent,
+      plataforma: navigator.platform,
+      data: new Date().toISOString(),
+      timestamp: serverTimestamp(),
+      id: getOrCreateVisitId(origem),
+      dominio: window.location.hostname,
+    };
+
+    console.log("Salvando evento no Firebase:", evento);
+    await push(ref(db, "eventos"), evento);
+    console.log("Evento salvo com sucesso!");
+  } catch (error) {
+    console.error("Erro ao registrar evento:", error);
+    // Tentar salvar sem as APIs de IP em caso de erro
+    try {
+      const eventoFallback = {
+        tipo,
+        origem,
+        ip: "desconhecido",
+        pais: "desconhecido",
+        pais_code: "unknown",
+        cidade: "desconhecida",
+        estado: "desconhecido",
+        org: "desconhecido",
+        agente: navigator.userAgent,
+        plataforma: navigator.platform,
+        data: new Date().toISOString(),
+        timestamp: serverTimestamp(),
+        id: getOrCreateVisitId(origem),
+        dominio: window.location.hostname,
+        erro: "fallback",
+      };
+
+      console.log("Tentando salvar evento fallback:", eventoFallback);
+      await push(ref(db, "eventos"), eventoFallback);
+      console.log("Evento fallback salvo com sucesso!");
+    } catch (fallbackError) {
+      console.error("Erro também no fallback:", fallbackError);
+    }
   }
-
-  const ipwhois = await fetch("https://ipwho.is/").then((res) => res.json());
-  const ipapi = await fetch("http://ip-api.com/json/").then((res) =>
-    res.json()
-  );
-
-  const evento = {
-    tipo,
-    origem,
-    ip: ipwhois.ip || ipapi.query,
-    pais: ipwhois.country || ipapi.country,
-    pais_code: (ipwhois.country_code || ipapi.countryCode || "").toLowerCase(),
-    cidade: ipwhois.city || ipapi.city,
-    estado: ipwhois.region || ipapi.regionName,
-    org: ipwhois.connection?.org || ipapi.org,
-    agente: navigator.userAgent,
-    plataforma: navigator.platform,
-    data: new Date().toISOString(),
-    timestamp: serverTimestamp(),
-    id: getOrCreateVisitId(origem),
-  };
-
-  await push(ref(db, "eventos"), evento);
 }
