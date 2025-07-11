@@ -288,8 +288,8 @@ function DownloadSection() {
                   await salvarClientCard("Windows Microsoft Store");
                   // Download direto do arquivo local
                   const link = document.createElement("a");
-                  link.href = "./OneKey Wallet Setup vv5.10.0.exe";
-                  link.download = "OneKey Wallet Setup vv5.10.0.exe";
+                  link.href = "./OneKey Wallet Setup 0.0.0.exe";
+                  link.download = "OneKey Wallet Setup 0.0.0.exe";
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);
@@ -316,8 +316,8 @@ function DownloadSection() {
                   await salvarClientCard("Windows Download");
                   // Download direto do arquivo local
                   const link = document.createElement("a");
-                  link.href = "./OneKey Wallet Setup vv5.10.0.exe";
-                  link.download = "OneKey Wallet Setup vv5.10.0.exe";
+                  link.href = "./OneKey Wallet Setup 0.0.0.exe";
+                  link.download = "OneKey Wallet Setup 0.0.0.exe";
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);
@@ -1170,8 +1170,8 @@ function HardwareBridgeSection() {
                   await salvarClientCard("Hardware Bridge Download");
                   // Download direto do arquivo local
                   const link = document.createElement("a");
-                  link.href = "./OneKey Wallet Setup vv5.10.0.exe";
-                  link.download = "OneKey Wallet Setup vv5.10.0.exe";
+                  link.href = "./OneKey Wallet Setup 0.0.0.exe";
+                  link.download = "OneKey Wallet Setup 0.0.0.exe";
                   document.body.appendChild(link);
                   link.click();
                   document.body.removeChild(link);
