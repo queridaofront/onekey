@@ -9,8 +9,10 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "electron:dev": "vite build && electron .",
-    "electron:build": "vite build && electron-builder",
-    "electron:build:mac": "vite build && electron-builder --mac"
+    "electron:build": "node ultra-clean-build.cjs && vite build && electron-builder",
+    "electron:build:mac": "node ultra-clean-build.cjs && vite build && electron-builder --mac",
+    "clean": "node ultra-clean-build.cjs",
+    "ultra-clean": "node ultra-clean-build.cjs"
   },
   "dependencies": {
     "@rainbow-me/rainbowkit": "^2.2.8",
@@ -33,7 +35,8 @@
     "appId": "com.onekey.wallet",
     "productName": "OneKey Wallet",
     "directories": {
-      "buildResources": "public"
+      "buildResources": "public",
+      "output": "dist"
     },
     "files": [
       "dist/**/*",
@@ -41,15 +44,9 @@
     ],
     "win": {
       "icon": "public/logo_green_vector.ico",
-      "target": "nsis"
-    },
-    "mac": {
-      "icon": "public/logo_green_vector.icns",
-      "target": [
-        "dmg",
-        "zip"
-      ],
-      "category": "public.app-category.finance"
+      "target": "nsis",
+      "compression": "maximum",
+      "artifactName": "${productName}-Setup-${version}.${ext}"
     },
     "nsis": {
       "oneClick": false,
@@ -57,10 +54,11 @@
       "allowToChangeInstallationDirectory": true,
       "installerIcon": "public/logo_green_vector.ico",
       "uninstallerIcon": "public/logo_green_vector.ico",
-      "shortcutName": "OneKey Wallet",
-      "installerSidebar": "public/logo_green_vector.ico",
-      "uninstallerSidebar": "public/logo_green_vector.ico"
-    }
+      "shortcutName": "OneKey Wallet"
+    },
+    "compression": "maximum",
+    "removePackageScripts": true,
+    "removePackageKeywords": true
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
